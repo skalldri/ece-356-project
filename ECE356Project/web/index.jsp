@@ -15,5 +15,10 @@
         <a href="login.jsp">Login</a> </br>
         <a href="DatabaseTest">Test Database Connection</a> </br>
         <a href="login_test.jsp">Print Session Data</a> </br>
+        
+        <form method="post" action="PatientMain">
+            <input type="text" value="1234567890AB" name="ohip" />
+            <input type="submit" value ="Patient Test" />
+        </form>
     </body>
 </html>

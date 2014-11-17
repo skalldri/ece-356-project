@@ -40,6 +40,10 @@ public class PatientMain extends HttpServlet {
         
         Patient patient = retrievePatient(ohip);
         
+        request.getSession().setAttribute("patient", patient);
+        
+        request.getRequestDispatcher("PatientMain.jsp").forward(request, response);
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -71,9 +75,9 @@ public class PatientMain extends HttpServlet {
             
             
             
-            String query = new StringBuilder().append("SELECT * FROM Patients WHERE health_card = ')").
+            String query = new StringBuilder().append("SELECT * FROM Patients WHERE health_card = '").
                     append(ohip).
-                    append("' AND deleted_datetime IS NOT NULL LIMIT 1").
+                    append("' AND deleted_datetime IS NULL LIMIT 1").
                     toString();
             
             ResultSet result = stmt.executeQuery(query);
