@@ -8,6 +8,7 @@ import databaseTools.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -75,31 +76,32 @@ public class PatientMain extends HttpServlet {
             
             
             
-            String query = new StringBuilder().append("SELECT * FROM Patients WHERE health_card = '").
+            String query = new StringBuilder().
+                    append("SELECT * FROM Patient WHERE health_card = '").
                     append(ohip).
                     append("' AND deleted_datetime IS NULL LIMIT 1").
                     toString();
             
             ResultSet result = stmt.executeQuery(query);
-            
-            
-            con.close();
-            
+
             if (!result.next())
                 return p;
                 
+
             
             p = new Patient(
                     ohip,
-                    result.getString("name"), 
-                    result.getString("address"), 
-                    result.getString("phone_number"), 
-                    result.getString("sin"), 
-                    result.getString("default_doctor_username"), 
-                    result.getString("patient_health"), 
-                    result.getDate("create_datetime"), 
-                    result.getString("deleted_datetime"), 
-                    result.getString("comments"));
+                    result.getNString("name"), 
+                    result.getNString("address"), 
+                    result.getNString("phone_number"), 
+                    result.getNString("sin"), 
+                    result.getNString("default_doctor_username"), 
+                    result.getNString("patient_health"), 
+                    result.getDate("created_datetime"), 
+                    result.getNString("deleted_datetime"), 
+                    result.getNString("comments"));
+            
+            con.close();
             
         }
         catch(Exception e) 

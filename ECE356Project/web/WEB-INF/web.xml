@@ -8,6 +8,10 @@
         <servlet-name>DatabaseTest</servlet-name>
         <servlet-class>ece356.DatabaseTest</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PatientMain</servlet-name>
+        <servlet-class>patient.PatientMain</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>DatabaseTest</servlet-name>
         <url-pattern>/DatabaseTest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PatientMain</servlet-name>
+        <url-pattern>/PatientMain</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
