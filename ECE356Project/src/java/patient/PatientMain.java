@@ -5,6 +5,7 @@
 package patient;
 
 import databaseTools.Constants;
+import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -38,7 +39,14 @@ public class PatientMain extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String ohip = request.getParameter("ohip");
+        if(request.getSession().getAttribute("userData") == null || !((UserData)request.getSession().getAttribute("userData")).getUserType().equals("patient"))
+        {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
+        }
+        
+        //String ohip = request.getParameter("ohip"); //Should also be able to retreive ((UserData)request.getSession().getAttribute("userData")).getUsername()
+        String ohip = ((UserData)request.getSession().getAttribute("userData")).getUsername();
         
         Patient patient = retrievePatient(ohip);
         
@@ -85,7 +93,11 @@ public class PatientMain extends HttpServlet {
 
             if (!result.next())
                 return p;
+<<<<<<< HEAD
                 
+=======
+            
+>>>>>>> origin/master
             p = new Patient(
                     ohip,
                     result.getNString("name"), 
