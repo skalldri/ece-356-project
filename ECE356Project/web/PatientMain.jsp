@@ -18,6 +18,7 @@
         <h1>Welcome <%= patient.getName() %></h1>
         
         <h2>Patient Info</h2>
+        
         <table>
             <tr>
                 <td>Health Card</td>
@@ -49,6 +50,8 @@
             </tr>
         </table>
         
-        
+            <a href="EditPersonalInformation.jsp">Edit Details</a>   <br>
+            <a href="VisitationRecords">Visitation History and Upcoming Appointments</a> <br>
+            <a href="PrescriptionRecords">Prescription Records</a> <br>
     </body>
 </html>

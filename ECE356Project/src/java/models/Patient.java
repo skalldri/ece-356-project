@@ -4,7 +4,7 @@
  */
 package models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -18,7 +18,7 @@ public class Patient {
     private String sin;
     private String default_doctor_username;
     private String patient_health;
-    private Date create_datetime;
+    private Timestamp create_datetime;
     private String deleted_datetime;
     private String comments;
 
@@ -35,7 +35,7 @@ public class Patient {
         this.comments = null;
     }
     
-    public Patient(String health_card, String name, String address, String phone_number, String sin, String default_doctor_username, String patient_health, Date create_datetime, String deleted_datetime, String comments) {
+    public Patient(String health_card, String name, String address, String phone_number, String sin, String default_doctor_username, String patient_health, Timestamp create_datetime, String deleted_datetime, String comments) {
         this.health_card = health_card;
         this.name = name;
         this.address = address;
@@ -76,7 +76,7 @@ public class Patient {
         return patient_health;
     }
 
-    public Date getCreate_datetime() {
+    public Timestamp getCreate_datetime() {
         return create_datetime;
     }
 
