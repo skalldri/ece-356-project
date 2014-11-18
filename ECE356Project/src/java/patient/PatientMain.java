@@ -93,11 +93,7 @@ public class PatientMain extends HttpServlet {
 
             if (!result.next())
                 return p;
-<<<<<<< HEAD
-                
-=======
-            
->>>>>>> origin/master
+
             p = new Patient(
                     ohip,
                     result.getNString("name"), 
@@ -106,7 +102,7 @@ public class PatientMain extends HttpServlet {
                     result.getNString("sin"), 
                     result.getNString("default_doctor_username"), 
                     result.getNString("patient_health"), 
-                    result.getDate("created_datetime"), 
+                    result.getTimestamp("created_datetime"), 
                     result.getNString("deleted_datetime"), 
                     result.getNString("comments"));
             
