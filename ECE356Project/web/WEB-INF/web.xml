@@ -12,6 +12,10 @@
         <servlet-name>PatientMain</servlet-name>
         <servlet-class>patient.PatientMain</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DoctorMain</servlet-name>
+        <servlet-class>staff.DoctorMain</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>PatientMain</servlet-name>
         <url-pattern>/PatientMain</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoctorMain</servlet-name>
+        <url-pattern>/DoctorMain</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

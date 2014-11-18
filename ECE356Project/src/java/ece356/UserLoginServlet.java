@@ -71,7 +71,7 @@ public class UserLoginServlet extends HttpServlet {
 
                     session.setAttribute("userData", data);
 
-                    url = "/StaffMain.jsp";
+                    url = "/DoctorMain";
                 }
             }
             else if("patient".equals(request.getParameter("usertype")))
