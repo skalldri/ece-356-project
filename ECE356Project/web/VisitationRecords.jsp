@@ -61,6 +61,8 @@
     
     <body>
         <h1>Visitation Records</h1>
+        <a href="PatientMain.jsp"><- Back</a>
+        <br>
         Show records
         <select id="filter">
             <option value="future">Upcoming Appointments</option>

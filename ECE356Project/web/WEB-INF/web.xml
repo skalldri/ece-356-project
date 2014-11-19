@@ -16,6 +16,14 @@
         <servlet-name>DoctorMain</servlet-name>
         <servlet-class>staff.DoctorMain</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>VisitationRecords</servlet-name>
+        <servlet-class>patient.VisitationRecords</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditPatientInformation</servlet-name>
+        <servlet-class>patient.EditPatientInformation</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -31,6 +39,14 @@
     <servlet-mapping>
         <servlet-name>DoctorMain</servlet-name>
         <url-pattern>/DoctorMain</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VisitationRecords</servlet-name>
+        <url-pattern>/VisitationRecords</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditPatientInformation</servlet-name>
+        <url-pattern>/EditPatientInformation</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

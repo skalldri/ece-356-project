@@ -5,6 +5,7 @@
 package patient;
 
 import databaseTools.Constants;
+import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -40,7 +41,8 @@ public class VisitationRecords extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String ohip = ((Patient) request.getSession().getAttribute("patient")).getHealth_card();
+        //String ohip = ((Patient) request.getSession().getAttribute("patient")).getHealth_card();
+        String ohip = ((UserData)request.getSession().getAttribute("userData")).getUsername();
         List<Visit> visits = fetchVisits(ohip);
         
         request.getSession().setAttribute("visits", visits);
