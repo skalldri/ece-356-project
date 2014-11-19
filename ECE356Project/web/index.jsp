@@ -4,6 +4,7 @@
     Author     : Stuart Alldritt
 --%>
 
+<%@page import="ece356.UserData"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,9 +17,11 @@
         <a href="DatabaseTest">Test Database Connection</a> </br>
         <a href="login_test.jsp">Print Session Data</a> </br>
         
-        <form method="post" action="PatientMain">
-            <input type="text" value="1234567890AB" name="ohip" />
-            <input type="submit" value ="Patient Test" />
-        </form>
+        <% UserData ud = new UserData();
+           ud.setUserType("patient");
+           ud.setUsername("1234567890AB"); %>
+        <% request.getSession().setAttribute("userData", ud); %>
+        <a href="PatientMain">Patient Test</a>
+
     </body>
 </html>

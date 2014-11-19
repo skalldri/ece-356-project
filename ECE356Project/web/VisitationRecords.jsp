@@ -13,21 +13,63 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Visitation Records</title>
+        <script src="jquery-1.11.1.min.js"></script>
+        <script> 
+            function updateFilter()
+            {
+                var nowDate = new Date();
+                var filter = $("select").val();
+                
+                $(".dataRows").each(function() {
+                    //alert($("#start").text());
+                    var dateString = $(this).find("#start").text();
+                    var date = new Date(dateString);
+                    
+                    if (date < nowDate) {
+                        if (filter == "past" || filter == "all") {
+                            $(this).show();
+                        }
+                        else {
+                            $(this).hide();
+                        }
+                    }
+                    else {
+                        if (filter == "future" || filter == "all") {
+                            $(this).show();
+                        }
+                        else {
+                            $(this).hide();
+                        }
+                    }
+                });
+            }
+            
+            
+            $(document).ready(function(){
+                updateFilter();
+                
+                $("select").change(function() {
+                    updateFilter();
+                });
+            });
+            
+            
+        </script>
+        
     </head>
-    
-    
     
     
     <body>
         <h1>Visitation Records</h1>
         Show records
-        <select name="filter">
+        <select id="filter">
             <option value="future">Upcoming Appointments</option>
             <option value="past">Past Visits</option>
             <option value="all">All</option>
         </select>
         
-        <table>
+        
+        <table id="mainTable">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -44,8 +86,7 @@
                 <% ArrayList<Visit> visits = (ArrayList<Visit>) request.getSession().getAttribute("visits"); %>
                 <%  for (int i = 0; i < visits.size(); i++) { %>
                 <%  Visit v = visits.get(i); %>
-                <tr>
-                    
+                <tr class="dataRows">
                     <td><%= DateFormat.getDateInstance().format(v.getStart_datetime()) %></td>
                     <td><%= DateFormat.getTimeInstance().format(v.getStart_datetime()) %></td>
                     <td><%= DateFormat.getTimeInstance().format(v.getEnd_datetime()) %></td>
@@ -54,10 +95,21 @@
                     <td><%= v.getProcedure_description() %></td>
                     <td><%= v.getProcedure_cost() %></td>
                     <td><%= DateFormat.getDateTimeInstance().format(v.getCreated_datetime()) %></td>
+                    <td id="start" style="display: none">
+                        <%= (v.getStart_datetime().getYear() + 1900) + "-" +
+                            (v.getStart_datetime().getMonth() + 1) + "-" +
+                            v.getStart_datetime().getDate() + " " +
+                            v.getStart_datetime().getHours() + ":" +
+                            v.getStart_datetime().getMinutes() + ":" +
+                            v.getStart_datetime().getSeconds()
+                        %>
+                    </td>
                 </tr>
                 <% } %>
             
             </tbody>
         </table>
     </body>
+    
+    
 </html>
