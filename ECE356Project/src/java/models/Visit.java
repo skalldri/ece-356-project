@@ -20,9 +20,8 @@ public class Visit {
     private Double procedure_cost;
     private String scheduling_of_treatment;
     private Timestamp created_datetime;
-    private Timestamp deleted_datetime;
 
-    public Visit(String doctor_username, Timestamp start_datetime, Timestamp end_datetime, String health_card, String diagnosis, String procedure_description, Double procedure_cost, String scheduling_of_treatment, Timestamp created_datetime, Timestamp deleted_datetime) {
+    public Visit(String doctor_username, Timestamp start_datetime, Timestamp end_datetime, String health_card, String diagnosis, String procedure_description, Double procedure_cost, String scheduling_of_treatment, Timestamp created_datetime) {
         this.doctor_username = doctor_username;
         this.start_datetime = start_datetime;
         this.end_datetime = end_datetime;
@@ -32,7 +31,6 @@ public class Visit {
         this.procedure_cost = procedure_cost;
         this.scheduling_of_treatment = scheduling_of_treatment;
         this.created_datetime = created_datetime;
-        this.deleted_datetime = deleted_datetime;
     }
     
     
@@ -70,11 +68,5 @@ public class Visit {
 
     public Timestamp getCreated_datetime() {
         return created_datetime;
-    }
-
-    public Timestamp getDeleted_datetime() {
-        return deleted_datetime;
-    }
-    
-    
+    }    
 }

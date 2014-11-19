@@ -10,12 +10,24 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Edit Information</title>
+        <script src="jquery-1.11.1.min.js"></script>
+        <script> 
+            $(document).ready(function() {
+
+                $(".fields").change(function() {
+                    document.getElementById("submitButton").disabled = false;
+                });
+            });
+        </script>
     </head>
     
     <jsp:useBean id="patient" class="models.Patient" scope="session"/>
     
     <body>
         <h1>Edit Information</h1>
+        
+        <a href="PatientMain"><- Back</a>
+        <br>
         
         <form method="post" action="EditPatientInformation">
             Address: 
@@ -29,13 +41,5 @@
             <input type="submit" id="submitButton" disabled="true" />
         </form>
     </body>
-
-    <script type="text/javascript">
-        $(function() {
-            $(".fields").onchange(function() {
-                document.getElementById("submitButton").disabled = false;
-            });
-        });
-    </script>
 </html>
 

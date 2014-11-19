@@ -79,7 +79,7 @@ public class VisitationRecords extends HttpServlet {
             String query = new StringBuilder().
                     append("SELECT * FROM Visit WHERE health_card = '").
                     append(ohip).
-                    append("' AND deleted_datetime IS NULL").
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00'").
                     toString();
             
             ResultSet result = stmt.executeQuery(query);
@@ -98,8 +98,7 @@ public class VisitationRecords extends HttpServlet {
                             result.getNString("procedure_description"), 
                             cost == 0.0d ? null : cost,
                             result.getNString("scheduling_of_treatment"), 
-                            result.getTimestamp("created_datetime"), 
-                            result.getTimestamp("deleted_datetime"))
+                            result.getTimestamp("created_datetime"))
                         );
             }
             

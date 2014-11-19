@@ -4,12 +4,20 @@
  */
 package patient;
 
+import databaseTools.Constants;
+import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.text.DateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Patient;
 
 /**
  *
@@ -31,6 +39,89 @@ public class EditPatientInformation extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
+        String newAddress = request.getParameter("address");
+        String newPhone = request.getParameter("phone");
+        String ohip = ((UserData)request.getSession().getAttribute("userData")).getUsername();
+        
+        Patient oldPatient = PatientMain.retrievePatient(ohip);
+        
+        if (oldPatient.getAddress().equals(newAddress) &&
+            oldPatient.getPhone_number().equals(newPhone))
+        {
+            // nothing changed
+        }
+        else
+        {
+            // make new patient and delete old one
+            Patient newPatient = new Patient(
+                    ohip, 
+                    oldPatient.getName(), 
+                    newAddress, 
+                    newPhone, 
+                    oldPatient.getSin(), 
+                    oldPatient.getDefault_doctor_username(),
+                    oldPatient.getPatient_health(), 
+                    oldPatient.getCreate_datetime(), 
+                    oldPatient.getComments(),
+                    oldPatient.getPassword());
+            
+            java.util.Date now = new java.util.Date();
+            String formattedDate = PatientMain.formatSqlDate(now);
+            
+            Statement stmt;
+            Connection con;
+            
+            try
+            {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+                stmt = con.createStatement();
+                                
+                String modifyQuery = new StringBuilder().
+                        append("UPDATE Patient SET deleted_datetime='").
+                        append(PatientMain.formatSqlDate(now)).
+                        append("' WHERE health_card='").
+                        append(ohip).
+                        append("' AND deleted_datetime ='0000-00-00 00:00:00'").
+                        toString();
+                
+                int result = stmt.executeUpdate(modifyQuery);
+                
+                // if result != 1 then something bad has gone wrong
+          
+                String insertQuery = new StringBuilder().
+                        append("INSERT INTO Patient (health_card, name, address, phone_number, "
+                        + "sin, default_doctor_username, patient_health, created_datetime, password) VALUES ('").
+                        append(ohip).
+                        append("', '").
+                        append(oldPatient.getName()).
+                        append("', '").
+                        append(newAddress).
+                        append("', '").
+                        append(newPhone).
+                        append("', '").
+                        append(oldPatient.getSin()).
+                        append("', '").
+                        append(oldPatient.getDefault_doctor_username()).
+                        append("', '").
+                        append(oldPatient.getPatient_health()).
+                        append("', '").
+                        append(PatientMain.formatSqlDate(oldPatient.getCreate_datetime())).
+                        append("', '").
+                        append(oldPatient.getPassword()).
+                        append("')").
+                        toString();
+                
+                stmt.executeUpdate(insertQuery);                
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
+            request.getRequestDispatcher("PatientMain").forward(request, response);
+            
+        }
         
         PrintWriter out = response.getWriter();
         try {

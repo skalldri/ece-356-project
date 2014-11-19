@@ -19,9 +19,9 @@ public class Patient {
     private String default_doctor_username;
     private String patient_health;
     private Timestamp create_datetime;
-    private String deleted_datetime;
     private String comments;
-
+    private String password;
+    
     public Patient() {
         this.health_card = null;
         this.name = null;
@@ -31,11 +31,11 @@ public class Patient {
         this.default_doctor_username = null;
         this.patient_health = null;
         this.create_datetime = null;
-        this.deleted_datetime = null;
         this.comments = null;
+        this.password = null;
     }
     
-    public Patient(String health_card, String name, String address, String phone_number, String sin, String default_doctor_username, String patient_health, Timestamp create_datetime, String deleted_datetime, String comments) {
+    public Patient(String health_card, String name, String address, String phone_number, String sin, String default_doctor_username, String patient_health, Timestamp create_datetime, String comments, String password) {
         this.health_card = health_card;
         this.name = name;
         this.address = address;
@@ -44,8 +44,12 @@ public class Patient {
         this.default_doctor_username = default_doctor_username;
         this.patient_health = patient_health;
         this.create_datetime = create_datetime;
-        this.deleted_datetime = deleted_datetime;
         this.comments = comments;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
     
     public String getHealth_card() {
@@ -78,10 +82,6 @@ public class Patient {
 
     public Timestamp getCreate_datetime() {
         return create_datetime;
-    }
-
-    public String getDeleted_datetime() {
-        return deleted_datetime;
     }
 
     public String getComments() {

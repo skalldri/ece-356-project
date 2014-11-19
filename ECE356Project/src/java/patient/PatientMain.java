@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -71,7 +72,7 @@ public class PatientMain extends HttpServlet {
         }
     }
 
-    private Patient retrievePatient(String ohip)
+    public static Patient retrievePatient(String ohip)
     {
         Patient p = null;
         
@@ -86,7 +87,7 @@ public class PatientMain extends HttpServlet {
             String query = new StringBuilder().
                     append("SELECT * FROM Patient WHERE health_card = '").
                     append(ohip).
-                    append("' AND deleted_datetime IS NULL LIMIT 1").
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00' LIMIT 1").
                     toString();
             
             ResultSet result = stmt.executeQuery(query);
@@ -103,8 +104,8 @@ public class PatientMain extends HttpServlet {
                     result.getNString("default_doctor_username"), 
                     result.getNString("patient_health"), 
                     result.getTimestamp("created_datetime"), 
-                    result.getNString("deleted_datetime"), 
-                    result.getNString("comments"));
+                    result.getNString("comments"),
+                    result.getNString("password"));
             
             con.close();
             
@@ -116,6 +117,12 @@ public class PatientMain extends HttpServlet {
         
         return p;
         
+    }
+    
+    public static String formatSqlDate(java.util.Date toFormat)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.format(toFormat);
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
