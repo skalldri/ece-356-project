@@ -41,28 +41,29 @@ public class VisitationRecords extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        //String ohip = ((Patient) request.getSession().getAttribute("patient")).getHealth_card();
-        String ohip = ((UserData)request.getSession().getAttribute("userData")).getUsername();
+        //If user is logged in
+        if(request.getSession().getAttribute("userData") == null)
+        {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
+        }
+        
+        String ohip;
+        if(((UserData)request.getSession().getAttribute("userData")).getUserType().equals("patient"))
+        {
+            ohip = ((UserData)request.getSession().getAttribute("userData")).getUsername();
+        }
+        else // We're a doctor looking for a patient's records
+        {
+            ohip = request.getParameter("patient_id");
+        }
+        
+        
         List<Visit> visits = fetchVisits(ohip);
         
         request.getSession().setAttribute("visits", visits);
         
         request.getRequestDispatcher("VisitationRecords.jsp").forward(request, response);
-        
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet VisitationRecords</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet VisitationRecords at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
     }
 
     private List<Visit> fetchVisits(String ohip) {

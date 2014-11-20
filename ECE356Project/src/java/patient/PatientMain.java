@@ -54,22 +54,6 @@ public class PatientMain extends HttpServlet {
         request.getSession().setAttribute("patient", patient);
         
         request.getRequestDispatcher("PatientMain.jsp").forward(request, response);
-        
-        
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PatientMain</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PatientMain at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
     }
 
     public static Patient retrievePatient(String ohip)

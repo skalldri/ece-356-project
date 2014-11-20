@@ -4,6 +4,9 @@
     Author     : stuart
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="models.Patient"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,8 +16,21 @@
     </head>
     
     <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
+    <jsp:useBean id="doctorData" class="models.DoctorData" scope="session"/>
+    
     
     <body>
          <h1>Welcome <%= userData.getUsername() %></h1>
+         
+         <%
+            ArrayList<Patient> list = doctorData.getPatients();
+         %>
+         
+         <% for(int i = 0; i < list.size(); i++)
+            {
+               out.println(list.get(i).getName());
+            } 
+         %>
+         
     </body>
 </html>
