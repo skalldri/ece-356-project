@@ -55,7 +55,7 @@ public class VisitationRecords extends HttpServlet {
         }
         else // We're a doctor looking for a patient's records
         {
-            ohip = request.getParameter("patient_id");
+            ohip = request.getParameter("patient");
         }
         
         

@@ -26,11 +26,19 @@
             ArrayList<Patient> list = doctorData.getPatients();
          %>
          
-         <% for(int i = 0; i < list.size(); i++)
-            {
-               out.println(list.get(i).getName());
-            } 
-         %>
-         
+         My Patients:
+         <form method="post" action="DoctorMain">
+            <select name="patient">
+            <% for(int i = 0; i < list.size(); i++)
+               {             
+                  out.println("<option value=\"" + list.get(i).getHealth_card() + "\">" + list.get(i).getName() + "</option>");
+               } 
+            %>
+            </select>
+            <br/>
+            <input name="visits" value="Visitations" type="submit">
+            <br/>
+            <input name="record" value="General Record" type="submit">
+         </form>
     </body>
 </html>

@@ -51,6 +51,12 @@ public class DoctorMain extends HttpServlet {
             return;
         }
         
+        if(request.getParameter("visits") != null) // Forward to the visitation page
+        {
+            request.getRequestDispatcher("VisitationRecords").forward(request, response);
+            return;
+        }
+               
         String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();
         DoctorData doctorData = new DoctorData();
         
