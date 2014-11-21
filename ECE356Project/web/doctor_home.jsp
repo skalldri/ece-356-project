@@ -28,8 +28,6 @@
          
          My Patients:
          <form method="post" action="DoctorMain">
-            Username: <input type="text" name="username"> <br/>
-            Username: <input type="text" name="username"> <br/>
             <select name="patient">
             <% for(int i = 0; i < list.size(); i++)
                {             
@@ -41,6 +39,19 @@
             <input name="visits" value="Visitations" type="submit">
             <br/>
             <input name="record" value="General Record" type="submit">
-         </form>            
+         </form>
+         <br/><br/><br/>
+         Patient Search:
+         <form method="post" action="PatientSearch">
+             
+             Search all patients: <input name="all_patients" type="checkbox"> <br/>
+             Name: <input type="text" name="name"> <br/>
+             Health card: <input type="text" name="ohip"> <br/>
+             Phone: <input type="text" name="phone"> <br/>
+             SIN: <input type="text" name="sin"> <br/>
+             Last Visit date: <input type="text" name="date"> <br/>
+             <input type="submit">
+         </form>
+            
     </body>
 </html>
