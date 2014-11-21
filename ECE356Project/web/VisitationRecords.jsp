@@ -58,6 +58,7 @@
         
     </head>
     
+    <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
     
     <body>
         <h1>Visitation Records</h1>
@@ -105,6 +106,11 @@
                             v.getStart_datetime().getSeconds()
                         %>
                     </td>
+                    <td><form method="post" action="VisitationRecords"><% 
+                    if(!userData.getUserType().equals("patient")){
+                        out.println("<input name=\"editAppointment\" value=\"Edit\" type=\"submit\">");
+                    }
+                    %></form></td>
                 </tr>
                 <% } %>
             

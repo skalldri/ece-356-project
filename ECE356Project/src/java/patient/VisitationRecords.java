@@ -58,6 +58,11 @@ public class VisitationRecords extends HttpServlet {
             ohip = request.getParameter("patient");
         }
         
+        if(request.getParameter("editAppointment") != null) // Forward to the edit page
+        {
+            request.getRequestDispatcher("EditAppointment").forward(request, response);
+            return;
+        }
         
         List<Visit> visits = fetchVisits(ohip);
         

@@ -41,6 +41,6 @@
             <input name="visits" value="Visitations" type="submit">
             <br/>
             <input name="record" value="General Record" type="submit">
-         </form>
+         </form>            
     </body>
 </html>
