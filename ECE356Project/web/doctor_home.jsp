@@ -28,6 +28,8 @@
          
          My Patients:
          <form method="post" action="DoctorMain">
+            Username: <input type="text" name="username"> <br/>
+            Username: <input type="text" name="username"> <br/>
             <select name="patient">
             <% for(int i = 0; i < list.size(); i++)
                {             

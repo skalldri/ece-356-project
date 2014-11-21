@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author stuart
+ * @author Stuart Alldritt
  */
 public class EditAppointment extends HttpServlet {
 
