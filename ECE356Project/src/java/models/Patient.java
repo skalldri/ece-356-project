@@ -22,6 +22,7 @@ public class Patient {
     private Timestamp deleted_datetime;
     private String comments;
     private String password;
+    public boolean editable;
     
     public Patient() {
         this.health_card = null;
@@ -35,6 +36,7 @@ public class Patient {
         this.deleted_datetime = null;
         this.comments = null;
         this.password = null;
+        this.editable = false;
     }
     
     public Patient(String health_card, String name, String address, String phone_number, String sin, String default_doctor_username, String patient_health, Timestamp create_datetime, Timestamp deleted_datetime, String comments, String password) {

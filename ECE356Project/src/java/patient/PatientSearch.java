@@ -47,12 +47,13 @@ public class PatientSearch extends HttpServlet {
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
-        
+
         HttpSession session = request.getSession();
         
         ArrayList<Patient> resultingPatients = new ArrayList<Patient>();
         
         String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();
+        String userVariant = ((UserData)request.getSession().getAttribute("userData")).getUserVariant();
         
         Statement stmt;
         Connection con;
@@ -64,10 +65,12 @@ public class PatientSearch extends HttpServlet {
             
             String default_doctor = "";
             String deleted_records = "";
+            boolean editable = false;
             
             if(request.getParameter("all_patients") == null)
             {
-                default_doctor = " AND default_doctor_username = '" + username + "'";
+                editable = true;
+                default_doctor = " AND (default_doctor_username = '" + username + "' OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '" + username + "'))";
             }
             
             if(request.getParameter("deleted_records") == null)
@@ -87,6 +90,24 @@ public class PatientSearch extends HttpServlet {
                     append(default_doctor).
                     toString();
             
+            if(userVariant.equals("STAFF"))
+            {               
+                query = new StringBuilder().
+                    append("SELECT * FROM Patient WHERE (default_doctor_username in (SELECT supervisor_username from Supervisor WHERE staff_username = '").
+                    append(username).    
+                    append("') OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '").
+                    append(username).
+                    append("')) AND name LIKE '%").
+                    append(request.getParameter("name")).
+                    append("%' AND phone_number LIKE '%").
+                    append(request.getParameter("phone")).
+                    append("%' AND sin LIKE '%").
+                    append(request.getParameter("sin")).
+                    append("%'").
+                    append(deleted_records).
+                    toString();
+            }
+            
             ResultSet result = stmt.executeQuery(query);
 
             while(result.next())
@@ -103,6 +124,8 @@ public class PatientSearch extends HttpServlet {
                         result.getTimestamp("deleted_datetime"),
                         result.getNString("comments"),
                         result.getNString("password"));
+                
+                p.editable = editable;
                 
                 resultingPatients.add(p);
             }

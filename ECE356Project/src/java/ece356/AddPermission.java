@@ -9,20 +9,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import models.Visit;
-import patient.PatientMain;
 
 /**
  *
- * @author stuart
+ * @author Stuart Alldritt
  */
-public class CreatePatient extends HttpServlet {
+public class AddPermission extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -36,15 +33,13 @@ public class CreatePatient extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         //If user is logged in
         if(request.getSession().getAttribute("userData") == null || !((UserData)request.getSession().getAttribute("userData")).getUserType().equals("staff"))
         {
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
-        
-        String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();         
+    
         Statement stmt;
         Connection con;
         try
@@ -53,29 +48,13 @@ public class CreatePatient extends HttpServlet {
             con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
             stmt = con.createStatement();
             
-            if(request.getParameter("default_doctor") != null)
-            {
-                username = request.getParameter("default_doctor");
-            }
-            
             String insertQuery = new StringBuilder().
-                        append("INSERT INTO Patient (health_card, name, address, phone_number, "
-                        + "sin, default_doctor_username, patient_health, password) VALUES ('").
+                        append("INSERT INTO Staff_Permissions (username, health_card, permission_level) VALUES ('").
+                        append(request.getParameter("username")).
+                        append("', '").
                         append(request.getParameter("ohip")).
                         append("', '").
-                        append(request.getParameter("name")).
-                        append("', '").
-                        append(request.getParameter("address")).
-                        append("', '").
-                        append(request.getParameter("phone")).
-                        append("', '").
-                        append(request.getParameter("sin")).
-                        append("', '").
-                        append(username).
-                        append("', '").
-                        append(request.getParameter("health_state")).
-                        append("', '").
-                        append("ohip").
+                        append("0").
                         append("')").
                         toString();
             
@@ -91,7 +70,7 @@ public class CreatePatient extends HttpServlet {
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<html>");
                 out.println("<head>");
-                out.println("<title>CreatePatient</title>");            
+                out.println("<title>AddPermission</title>");            
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
@@ -103,7 +82,7 @@ public class CreatePatient extends HttpServlet {
             return;
         }
         
-        request.getRequestDispatcher("CreatePatient.jsp").forward(request, response);
+        request.getRequestDispatcher("doctor_home.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

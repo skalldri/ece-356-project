@@ -1,30 +1,22 @@
 <%-- 
-    Document   : doctor_home
-    Created on : 18-Nov-2014, 2:56:02 PM
-    Author     : stuart
+    Document   : StaffMain
+    Created on : Nov 22, 2014, 12:34:25 PM
+    Author     : Stuart Alldritt
 --%>
 
-<%@page import="java.util.ArrayList"%>
-<%@page import="models.Patient"%>
-<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Doctor Homepage</title>
+        <title>Staff Main</title>
     </head>
-    
-    <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
-    <jsp:useBean id="doctorData" class="models.DoctorData" scope="session"/>
-    
-    
     <body>
-         <h1>Welcome to Doctor Homepage, <%= userData.getUsername() %></h1>
-         
-         Patient Search:
+        <h1>Staff Main Page</h1>
+        <a href="CreatePatient.jsp">Create New Patient</a>
+        <br/><br/><br/>
+        Patient Search:
          <form method="post" action="PatientSearch">
-             Search all patients: <input name="all_patients" type="checkbox"> <br/>
              Show deleted records: <input name="deleted_records" type="checkbox"> <br/>
              Name: <input type="text" name="name"> <br/>
              Health card: <input type="text" name="ohip"> <br/>
@@ -32,6 +24,6 @@
              SIN: <input type="text" name="sin"> <br/>
              Last Visit date (not working yet): <input type="text" name="date"> <br/>
              <input type="submit">
-         </form>   
+         </form>
     </body>
 </html>

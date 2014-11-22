@@ -9,20 +9,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import models.Visit;
+import models.Patient;
 import patient.PatientMain;
 
 /**
  *
- * @author stuart
+ * @author Stuart Alldritt
  */
-public class CreatePatient extends HttpServlet {
+public class AssignPatient extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -36,7 +36,6 @@ public class CreatePatient extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         //If user is logged in
         if(request.getSession().getAttribute("userData") == null || !((UserData)request.getSession().getAttribute("userData")).getUserType().equals("staff"))
         {
@@ -44,44 +43,56 @@ public class CreatePatient extends HttpServlet {
             return;
         }
         
-        String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();         
         Statement stmt;
         Connection con;
         try
         {
+            Enumeration<String> test = request.getParameterNames();
+            String ohip = request.getParameter("ohip");
+            Patient oldPatient = PatientMain.retrievePatient(request.getParameter("ohip"));
+            java.util.Date now = new java.util.Date();
+            String formattedDate = PatientMain.formatSqlDate(now);
+            
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
-            stmt = con.createStatement();
-            
-            if(request.getParameter("default_doctor") != null)
-            {
-                username = request.getParameter("default_doctor");
-            }
-            
-            String insertQuery = new StringBuilder().
+                con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+                stmt = con.createStatement();
+                                
+                String modifyQuery = new StringBuilder().
+                        append("UPDATE Patient SET deleted_datetime='").
+                        append(PatientMain.formatSqlDate(now)).
+                        append("' WHERE health_card='").
+                        append(oldPatient.getHealth_card()).
+                        append("' AND deleted_datetime ='0000-00-00 00:00:00'").
+                        toString();
+                
+                int result = stmt.executeUpdate(modifyQuery);
+                
+                // if result != 1 then something bad has gone wrong
+          
+                String insertQuery = new StringBuilder().
                         append("INSERT INTO Patient (health_card, name, address, phone_number, "
-                        + "sin, default_doctor_username, patient_health, password) VALUES ('").
-                        append(request.getParameter("ohip")).
+                        + "sin, default_doctor_username, patient_health, created_datetime, password) VALUES ('").
+                        append(oldPatient.getHealth_card()).
                         append("', '").
-                        append(request.getParameter("name")).
+                        append(oldPatient.getName()).
                         append("', '").
-                        append(request.getParameter("address")).
+                        append(oldPatient.getAddress()).
                         append("', '").
-                        append(request.getParameter("phone")).
+                        append(oldPatient.getPhone_number()).
                         append("', '").
-                        append(request.getParameter("sin")).
+                        append(oldPatient.getSin()).
                         append("', '").
-                        append(username).
+                        append(request.getParameter("username")).
                         append("', '").
-                        append(request.getParameter("health_state")).
+                        append(oldPatient.getPatient_health()).
                         append("', '").
-                        append("ohip").
+                        append(PatientMain.formatSqlDate(oldPatient.getCreate_datetime())).
+                        append("', '").
+                        append(oldPatient.getPassword()).
                         append("')").
                         toString();
-            
-            stmt.executeUpdate(insertQuery);
-            
-            con.close();    
+                
+                stmt.executeUpdate(insertQuery); 
         }
         catch(Exception e) 
         {
@@ -91,7 +102,7 @@ public class CreatePatient extends HttpServlet {
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<html>");
                 out.println("<head>");
-                out.println("<title>CreatePatient</title>");            
+                out.println("<title>AssignPatient</title>");            
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
@@ -103,7 +114,7 @@ public class CreatePatient extends HttpServlet {
             return;
         }
         
-        request.getRequestDispatcher("CreatePatient.jsp").forward(request, response);
+        request.getRequestDispatcher("doctor_home.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

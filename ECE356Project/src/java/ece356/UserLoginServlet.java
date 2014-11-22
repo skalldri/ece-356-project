@@ -68,10 +68,16 @@ public class UserLoginServlet extends HttpServlet {
                     data.setPassword(request.getParameter("password"));        
                     data.setUsername(request.getParameter("username"));
                     data.setUserType(request.getParameter("usertype"));
+                    data.setUserVariant(result.getNString("type"));
 
                     session.setAttribute("userData", data);
-
-                    url = "/DoctorMain";
+                    
+                    if(result.getNString("type").equals("DOCTOR"))
+                    {
+                        url = "/DoctorMain";
+                    } else if(result.getNString("type").equals("STAFF")) {
+                        url = "/StaffMain.jsp";
+                    }
                 }
             }
             else if("patient".equals(request.getParameter("usertype")))
