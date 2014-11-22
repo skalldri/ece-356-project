@@ -114,7 +114,17 @@ public class AssignPatient extends HttpServlet {
             return;
         }
         
-        request.getRequestDispatcher("doctor_home.jsp").forward(request, response);
+        if(((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("STAFF"))
+        {
+            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
+        }
+        else if (((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("DOCTOR"))
+        {
+            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
+        } else
+        {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

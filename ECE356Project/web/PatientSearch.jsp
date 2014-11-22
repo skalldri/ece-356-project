@@ -33,6 +33,7 @@
                 <th>Prescription Records</th>
                 <th>Add Permissions</th>
                 <th>Reassign Patient</th>
+                <th>Edit Patient Data</th>
             </tr>
             <%
                 ArrayList<Patient> list = resultingPatients;
@@ -49,7 +50,10 @@
                    out.println("<td>" + list.get(i).getDeleted_datetime() + "</td>");
                    if(list.get(i).editable)
                    {
-                       out.println("<td><a href=\"VisitationRecords?patient=" + list.get(i).getHealth_card() + "\">View</a></td><td><a href=\"PatientMain\">View</a></td><td><a href=\"AddPermission.jsp?patient=" + list.get(i).getHealth_card() + "\">Add</a></td><td><a href=\"AssignPatient.jsp?patient=" + list.get(i).getHealth_card() + "\">Assign</a></td>");
+                       out.println("<td><a href=\"VisitationRecords?patient=" + list.get(i).getHealth_card() + "\">View</a></td>");
+                       out.println("<td><a href=\"PatientMain\">View</a></td><td><a href=\"AddPermission.jsp?patient=" + list.get(i).getHealth_card() + "\">Add</a></td>");
+                       out.println("<td><a href=\"AssignPatient.jsp?patient=" + list.get(i).getHealth_card() + "\">Assign</a></td>");
+                       out.println("<td><a href=\"CreatePatient.jsp?ohip=" + list.get(i).getHealth_card() + "&name=" + list.get(i).getName() + "&address=" + list.get(i).getAddress() + "&phone=" + list.get(i).getPhone_number() + "&health_state=" + list.get(i).getPatient_health() + "&sin=" + list.get(i).getSin() + "&comments=" + list.get(i).getComments() + "\">Edit</a></td>");
                    }
                    out.println("</tr>");
                 }

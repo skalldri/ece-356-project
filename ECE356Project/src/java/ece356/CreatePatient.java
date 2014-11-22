@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Patient;
 import models.Visit;
 import patient.PatientMain;
 
@@ -58,9 +59,24 @@ public class CreatePatient extends HttpServlet {
                 username = request.getParameter("default_doctor");
             }
             
+            Patient p = PatientMain.retrievePatient(request.getParameter("ohip"));
+            
+            java.util.Date now = new java.util.Date();
+            String formattedDate = PatientMain.formatSqlDate(now);
+            
+            String modifyQuery = new StringBuilder().
+                        append("UPDATE Patient SET deleted_datetime='").
+                        append(PatientMain.formatSqlDate(now)).
+                        append("' WHERE health_card='").
+                        append(request.getParameter("ohip")).
+                        append("' AND deleted_datetime ='0000-00-00 00:00:00'").
+                        toString();
+                
+            int result = stmt.executeUpdate(modifyQuery);
+            
             String insertQuery = new StringBuilder().
                         append("INSERT INTO Patient (health_card, name, address, phone_number, "
-                        + "sin, default_doctor_username, patient_health, password) VALUES ('").
+                        + "sin, default_doctor_username, patient_health, comments, password) VALUES ('").
                         append(request.getParameter("ohip")).
                         append("', '").
                         append(request.getParameter("name")).
@@ -75,7 +91,9 @@ public class CreatePatient extends HttpServlet {
                         append("', '").
                         append(request.getParameter("health_state")).
                         append("', '").
-                        append("ohip").
+                        append(request.getParameter("comments")).
+                        append("', '").
+                        append(p != null ? p.getPassword() : request.getParameter("ohip")).
                         append("')").
                         toString();
             
@@ -103,7 +121,17 @@ public class CreatePatient extends HttpServlet {
             return;
         }
         
-        request.getRequestDispatcher("CreatePatient.jsp").forward(request, response);
+        if(((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("STAFF"))
+        {
+            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
+        }
+        else if (((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("DOCTOR"))
+        {
+            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
+        } else
+        {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
