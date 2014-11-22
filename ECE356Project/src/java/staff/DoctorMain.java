@@ -88,7 +88,22 @@ public class DoctorMain extends HttpServlet {
         }
         catch(Exception e) 
         {
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>EditPatientInformation</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Exception occurred:" + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
             
+            return;
         }        
         
         request.getRequestDispatcher("doctor_home.jsp").forward(request, response);   

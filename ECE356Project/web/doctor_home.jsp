@@ -41,17 +41,18 @@
             <input name="record" value="General Record" type="submit">
          </form>
          <br/><br/><br/>
+         <a href="CreatePatient.jsp">Create New Patient</a>
+         <br/><br/><br/>
          Patient Search:
          <form method="post" action="PatientSearch">
-             
              Search all patients: <input name="all_patients" type="checkbox"> <br/>
+             Show deleted records: <input name="deleted_records" type="checkbox"> <br/>
              Name: <input type="text" name="name"> <br/>
              Health card: <input type="text" name="ohip"> <br/>
              Phone: <input type="text" name="phone"> <br/>
              SIN: <input type="text" name="sin"> <br/>
              Last Visit date: <input type="text" name="date"> <br/>
              <input type="submit">
-         </form>
-            
+         </form>   
     </body>
 </html>

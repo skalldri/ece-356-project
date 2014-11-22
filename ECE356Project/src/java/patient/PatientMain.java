@@ -88,6 +88,7 @@ public class PatientMain extends HttpServlet {
                     result.getNString("default_doctor_username"), 
                     result.getNString("patient_health"), 
                     result.getTimestamp("created_datetime"), 
+                    result.getTimestamp("deleted_datetime"), 
                     result.getNString("comments"),
                     result.getNString("password"));
             
@@ -96,7 +97,8 @@ public class PatientMain extends HttpServlet {
         }
         catch(Exception e) 
         {
-            return p;
+            String exception = e.toString();
+            return new Patient();
         }
         
         return p;

@@ -4,17 +4,49 @@
     Author     : Stuart Alldritt
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="models.Patient"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Patient Search Results</title>
     </head>
     
     <jsp:useBean id="resultingPatients" class="java.util.ArrayList" scope="session"/>
     
     <body>
-        <h1>Hello World!</h1>
+        
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Health Card</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>SIN</th>
+                <th>Comments</th>
+                <th>Health</th>
+                <th>Invalid as of</th>
+                <th>Visit Records</th>
+                <th>Prescription Records</th>
+            </tr>
+            <%
+                ArrayList<Patient> list = resultingPatients;
+
+                for(int i = 0; i < list.size(); i++)
+                {             
+                   out.println("<tr><td>" + list.get(i).getName() + "</td>");
+                   out.println("<td>" + list.get(i).getHealth_card() + "</td>");
+                   out.println("<td>" + list.get(i).getAddress() + "</td>");
+                   out.println("<td>" + list.get(i).getPhone_number() + "</td>");
+                   out.println("<td>" + list.get(i).getSin() + "</td>");
+                   out.println("<td>" + list.get(i).getComments() + "</td>");
+                   out.println("<td>" + list.get(i).getPatient_health() + "</td>");
+                   out.println("<td>" + list.get(i).getDeleted_datetime() + "</td>");
+                   out.println("<td><a href=\"VisitationRecords?patient=" + list.get(i).getHealth_card() + "\">View</a></td><td><a href=\"PatientMain\">View</a></td></tr>");
+                }
+            %>
+        </table>
     </body>
 </html>

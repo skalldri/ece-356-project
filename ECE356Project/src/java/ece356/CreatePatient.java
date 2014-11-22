@@ -2,30 +2,27 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package patient;
+package ece356;
 
 import databaseTools.Constants;
-import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import models.Patient;
 import models.Visit;
+import patient.PatientMain;
 
 /**
  *
- * @author Bo
+ * @author stuart
  */
-public class VisitationRecords extends HttpServlet {
+public class CreatePatient extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -39,41 +36,15 @@ public class VisitationRecords extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
         //If user is logged in
-        if(request.getSession().getAttribute("userData") == null)
+        if(request.getSession().getAttribute("userData") == null || !((UserData)request.getSession().getAttribute("userData")).getUserType().equals("staff"))
         {
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
         
-        String ohip;
-        if(((UserData)request.getSession().getAttribute("userData")).getUserType().equals("patient"))
-        {
-            ohip = ((UserData)request.getSession().getAttribute("userData")).getUsername();
-        }
-        else // We're a doctor looking for a patient's records
-        {
-            ohip = request.getParameter("patient");
-        }
-        
-        if(request.getParameter("editAppointment") != null) // Forward to the edit page
-        {
-            request.getRequestDispatcher("EditAppointment").forward(request, response);
-            return;
-        }
-        
-        List<Visit> visits = fetchVisits(ohip);
-        
-        request.getSession().setAttribute("visits", visits);
-        
-        request.getRequestDispatcher("VisitationRecords.jsp").forward(request, response);
-    }
-
-    private List<Visit> fetchVisits(String ohip) {
-        List<Visit> visits = new ArrayList<Visit>();
-                 
+        String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();         
         Statement stmt;
         Connection con;
         try
@@ -82,44 +53,54 @@ public class VisitationRecords extends HttpServlet {
             con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
             stmt = con.createStatement();
             
-            String query = new StringBuilder().
-                    append("SELECT * FROM Visit WHERE health_card = '").
-                    append(ohip).
-                    append("' AND deleted_datetime = '0000-00-00 00:00:00'").
-                    toString();
+            String insertQuery = new StringBuilder().
+                        append("INSERT INTO Patient (health_card, name, address, phone_number, "
+                        + "sin, default_doctor_username, patient_health, password) VALUES ('").
+                        append(request.getParameter("ohip")).
+                        append("', '").
+                        append(request.getParameter("name")).
+                        append("', '").
+                        append(request.getParameter("address")).
+                        append("', '").
+                        append(request.getParameter("phone")).
+                        append("', '").
+                        append(request.getParameter("sin")).
+                        append("', '").
+                        append(username).
+                        append("', '").
+                        append(request.getParameter("health_state")).
+                        append("', '").
+                        append("ohip").
+                        append("')").
+                        toString();
             
-            ResultSet result = stmt.executeQuery(query);
-
-            while (result.next())
-            {
-                Double cost = result.getDouble("procedure_cost");
-                
-                visits.add(
-                        new Visit(
-                            result.getNString("doctor_username"), 
-                            result.getTimestamp("start_datetime"),
-                            result.getTimestamp("end_datetime"), 
-                            ohip, 
-                            result.getNString("diagnosis"), 
-                            result.getNString("procedure_description"), 
-                            cost == 0.0d ? null : cost,
-                            result.getNString("scheduling_of_treatment"), 
-                            result.getTimestamp("created_datetime"),
-                            result.getTimestamp("created_datetime"))
-                        );
-            }
+            stmt.executeUpdate(insertQuery);
             
-            con.close();
-            
+            con.close();    
         }
         catch(Exception e) 
         {
-            return visits;
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>CreatePatient</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
+            return;
         }
         
-        return visits;
+        request.getRequestDispatcher("CreatePatient.jsp").forward(request, response);
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP
