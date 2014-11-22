@@ -5,12 +5,14 @@
 package patient;
 
 import databaseTools.Constants;
+import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +23,7 @@ import models.Patient;
 
 /**
  *
- * @author Stuart Alldritt
+ * @author stuart
  */
 public class PatientSearch extends HttpServlet {
 
@@ -39,9 +41,18 @@ public class PatientSearch extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
+        //If user is logged in
+        if(request.getSession().getAttribute("userData") == null || !((UserData)request.getSession().getAttribute("userData")).getUserType().equals("staff"))
+        {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
+        }
+        
         HttpSession session = request.getSession();
         
         ArrayList<Patient> resultingPatients = new ArrayList<Patient>();
+        
+        String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();
         
         Statement stmt;
         Connection con;
@@ -51,16 +62,29 @@ public class PatientSearch extends HttpServlet {
             con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
             stmt = con.createStatement();
             
+            String default_doctor = "";
+            String deleted_records = "";
+            
+            if(request.getParameter("all_patients") == null)
+            {
+                default_doctor = " AND default_doctor_username = '" + username + "'";
+            }
+            
+            if(request.getParameter("deleted_records") == null)
+            {
+                deleted_records = " AND deleted_datetime = '0000-00-00 00:00:00'";
+            }
+            
             String query = new StringBuilder().
-                    append("SELECT *, name LIKE %").
+                    append("SELECT * FROM Patient WHERE name LIKE '%").
                     append(request.getParameter("name")).
-                    append(", address LIKE '%").
-                    append(request.getParameter("address")).
-                    append("%', phone_number LIKE ").
+                    append("%' AND phone_number LIKE '%").
                     append(request.getParameter("phone")).
-                    append("%', sin LIKE %").
+                    append("%' AND sin LIKE '%").
                     append(request.getParameter("sin")).
-                    append("%' FROM Patient WHERE deleted_datetime = '0000-00-00 00:00:00'").
+                    append("%'").
+                    append(deleted_records).
+                    append(default_doctor).
                     toString();
             
             ResultSet result = stmt.executeQuery(query);
@@ -76,8 +100,11 @@ public class PatientSearch extends HttpServlet {
                         result.getNString("default_doctor_username"), 
                         result.getNString("patient_health"), 
                         result.getTimestamp("created_datetime"), 
+                        result.getTimestamp("deleted_datetime"),
                         result.getNString("comments"),
                         result.getNString("password"));
+                
+                resultingPatients.add(p);
             }
             
             session.setAttribute("resultingPatients", resultingPatients);
@@ -87,6 +114,22 @@ public class PatientSearch extends HttpServlet {
         }
         catch(Exception e) 
         {
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>PatientSearch</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
+            return;
         }
         
         request.getRequestDispatcher("PatientSearch.jsp").forward(request, response);

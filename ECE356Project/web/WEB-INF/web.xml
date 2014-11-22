@@ -24,6 +24,10 @@
         <servlet-name>EditPatientInformation</servlet-name>
         <servlet-class>patient.EditPatientInformation</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PatientSearch</servlet-name>
+        <servlet-class>patient.PatientSearch</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>EditPatientInformation</servlet-name>
         <url-pattern>/EditPatientInformation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PatientSearch</servlet-name>
+        <url-pattern>/PatientSearch</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

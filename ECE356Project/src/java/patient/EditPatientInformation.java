@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,6 +63,7 @@ public class EditPatientInformation extends HttpServlet {
                     oldPatient.getDefault_doctor_username(),
                     oldPatient.getPatient_health(), 
                     oldPatient.getCreate_datetime(), 
+                    null, 
                     oldPatient.getComments(),
                     oldPatient.getPassword());
             
@@ -116,27 +118,29 @@ public class EditPatientInformation extends HttpServlet {
             }
             catch (Exception e)
             {
+                PrintWriter out = response.getWriter();
+                try {
+                    /* TODO output your page here. You may use following sample code. */
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>EditPatientInformation</title>");            
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<h1>Exception occurred:" + e.toString() + "</h1>");
+                    out.println("</body>");
+                    out.println("</html>");
+                } finally {            
+                    out.close();
+                }
                 
+                return;
             }
             
             request.getRequestDispatcher("PatientMain").forward(request, response);
             
         }
         
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditPatientInformation</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditPatientInformation at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
