@@ -28,6 +28,14 @@
         <servlet-name>PatientSearch</servlet-name>
         <servlet-class>patient.PatientSearch</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewDrug</servlet-name>
+        <servlet-class>prescriptiondrugs.NewDrug</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DrugSearch</servlet-name>
+        <servlet-class>prescriptiondrugs.DrugSearch</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -55,6 +63,14 @@
     <servlet-mapping>
         <servlet-name>PatientSearch</servlet-name>
         <url-pattern>/PatientSearch</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewDrug</servlet-name>
+        <url-pattern>/NewDrug</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DrugSearch</servlet-name>
+        <url-pattern>/DrugSearch</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
