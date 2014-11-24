@@ -24,12 +24,25 @@
                     window.location.href = "NewPrescription.jsp?drug=" + drug_name + 
                         "&ohip=" + $("#patient").val();
                 });
+                
+                var $rows = $('table .dataRows');
+                $('#search').keyup(function() {
+                    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+                    $rows.show().filter(function() {
+                        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                        return !~text.indexOf(val);
+                    }).hide();
+                });
             });
         </script>
             
     </head>
     <body>
         <h1>Drug Search Results</h1>
+        
+        <input type="text" id="search" placeholder="Filter more">
+        
         <input type="hidden" id="patient" value="<%=  request.getSession().getAttribute("prescriptionPatient") %>" />
         <table>
             <tr>
@@ -39,7 +52,7 @@
             </tr>
             <% ArrayList<Drug> drugs = (ArrayList<Drug>) request.getSession().getAttribute("drugSearchResults"); %>
             <% for (Drug d : drugs) { %>
-            <tr>
+            <tr class="dataRows">
                 <td id="name"><%= d.getDrug_name() %></td>
                 <td id="cost"><%= d.getCost() %></td>
                 <td><button class="prescribe">Prescribe</button></td>
