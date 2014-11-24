@@ -121,6 +121,12 @@ public class CreatePatient extends HttpServlet {
             return;
         }
         
+        if(request.getParameter("go_back") != null)
+        {
+            request.getRequestDispatcher(request.getParameter("go_back") + "?reload").forward(request, response);
+            return;
+        }
+        
         if(((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("STAFF"))
         {
             request.getRequestDispatcher("StaffMain.jsp").forward(request, response);

@@ -14,7 +14,7 @@
     <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>  
     <body>
         
-        <a href="<%= request.getParameter("go_back")%>">BACK</a> <br/>
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         
         <form method="post" action="CreatePatient">
              Name: <input type="text" name="name" value="<%= request.getParameter("name") != null ? request.getParameter("name") : "" %>"> <br/>

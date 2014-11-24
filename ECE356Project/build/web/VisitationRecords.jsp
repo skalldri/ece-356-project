@@ -63,7 +63,7 @@
     <body>
         <h1>Visitation Records</h1>
         
-        <a href="<%= request.getParameter("go_back")%>">BACK</a> <br/>
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         
         <br>
         Show records

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import models.Patient;
+import models.PatientSearchData;
 
 /**
  *
@@ -55,6 +56,46 @@ public class PatientSearch extends HttpServlet {
         String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();
         String userVariant = ((UserData)request.getSession().getAttribute("userData")).getUserVariant();
         
+        
+        PatientSearchData myData;
+        
+        if(request.getParameter("reload") != null)
+        {
+            myData = (PatientSearchData)request.getSession().getAttribute("patientSearchData");
+            if(myData == null)
+            {
+                response.setContentType("text/html;charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                try {
+                    /* TODO output your page here. You may use following sample code. */
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Error</title>");            
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<h1>Cannot reload search results: no previous results found</h1>");
+                    out.println("</body>");
+                    out.println("</html>");
+                } finally {            
+                    out.close();
+                }
+                return;
+            }
+        }
+        else
+        {
+            myData = new PatientSearchData();
+            myData.all_patients = (request.getParameter("all_patients") != null);
+            myData.deleted_records = (request.getParameter("deleted_records") != null);        
+            myData.name = request.getParameter("name");
+            myData.phone = request.getParameter("phone");
+            myData.comments = request.getParameter("comments");
+            myData.diagnosis = request.getParameter("diagnosis");
+            myData.sin = request.getParameter("sin");
+            
+            request.getSession().setAttribute("patientSearchData", myData);
+        }
+        
         Statement stmt;
         Connection con;
         try
@@ -67,28 +108,28 @@ public class PatientSearch extends HttpServlet {
             String deleted_records = "";
             boolean editable = false;
             
-            if(request.getParameter("all_patients") == null)
+            if(!myData.all_patients)
             {
                 editable = true;
                 default_doctor = " AND (default_doctor_username = '" + username + "' OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '" + username + "'))";
             }
             
-            if(request.getParameter("deleted_records") == null)
+            if(!myData.deleted_records)
             {
                 deleted_records = " AND deleted_datetime = '0000-00-00 00:00:00'";
             }
             
             String query = new StringBuilder().
                     append("SELECT * FROM Patient WHERE name LIKE '%").
-                    append(request.getParameter("name")).
+                    append(myData.name).
                     append("%' AND phone_number LIKE '%").
-                    append(request.getParameter("phone")).
+                    append(myData.phone).
                     append("%' AND comments LIKE '%").
-                    append(request.getParameter("comments")).
+                    append(myData.comments).
                     append("%' AND patient_health LIKE '%").
-                    append(request.getParameter("diagnosis")).
+                    append(myData.diagnosis).
                     append("%' AND sin LIKE '%").
-                    append(request.getParameter("sin")).
+                    append(myData.sin).
                     append("%'").
                     append(deleted_records).
                     append(default_doctor).

@@ -60,7 +60,7 @@
     <body>
         <h1>Prescription Records</h1>
     
-        <a href="<%= request.getParameter("go_back")%>">BACK</a> <br/>
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         
         Show records
         <select id="filter">
