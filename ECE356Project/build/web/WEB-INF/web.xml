@@ -29,16 +29,16 @@
         <servlet-class>patient.PatientSearch</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CreatePatient</servlet-name>
-        <servlet-class>ece356.CreatePatient</servlet-class>
+        <servlet-name>NewDrug</servlet-name>
+        <servlet-class>prescriptiondrugs.NewDrug</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddPermission</servlet-name>
-        <servlet-class>ece356.AddPermission</servlet-class>
+        <servlet-name>DrugSearch</servlet-name>
+        <servlet-class>prescriptiondrugs.DrugSearch</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AssignPatient</servlet-name>
-        <servlet-class>ece356.AssignPatient</servlet-class>
+        <servlet-name>NewPrescription</servlet-name>
+        <servlet-class>prescriptiondrugs.NewPrescription</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
@@ -69,16 +69,16 @@
         <url-pattern>/PatientSearch</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreatePatient</servlet-name>
-        <url-pattern>/CreatePatient</url-pattern>
+        <servlet-name>NewDrug</servlet-name>
+        <url-pattern>/NewDrug</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AddPermission</servlet-name>
-        <url-pattern>/AddPermission</url-pattern>
+        <servlet-name>DrugSearch</servlet-name>
+        <url-pattern>/DrugSearch</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AssignPatient</servlet-name>
-        <url-pattern>/AssignPatient</url-pattern>
+        <servlet-name>NewPrescription</servlet-name>
+        <url-pattern>/NewPrescription</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

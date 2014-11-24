@@ -21,7 +21,9 @@
            ud.setUserType("patient");
            ud.setUsername("1234567890AB"); %>
         <% request.getSession().setAttribute("userData", ud); %>
-        <a href="PatientMain">Patient Test</a>
+        <a href="PatientMain">Patient Test</a> <br>
 
+        <a href="DrugSearch.jsp">Drug Test</a> <br>
+        <a href="NewPrescription.jsp">Prescription Test</a>
     </body>
 </html>
