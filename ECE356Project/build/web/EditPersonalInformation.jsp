@@ -25,8 +25,8 @@
     
     <body>
         <h1>Edit Information</h1>
-        
-        <a href="PatientMain"><- Back</a>
+            
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         <br>
         
         <form method="post" action="EditPatientInformation">
@@ -37,6 +37,8 @@
             Phone Number:
             <input type="text" name="phone" class="fields" value="<%= patient.getPhone_number() %>"/>
             <br>
+            
+            <input type="text" name="go_back" value="<%= request.getParameter("go_back") %>" hidden="true">
             
             <input type="submit" id="submitButton" disabled="true" />
         </form>

@@ -50,8 +50,8 @@
             </tr>
         </table>
         
-            <a href="EditPersonalInformation.jsp">Edit Details</a>   <br>
-            <a href="VisitationRecords">Visitation History and Upcoming Appointments</a> <br>
-            <a href="PrescriptionRecords">Prescription Records</a> <br>
+            <a href="EditPersonalInformation.jsp?go_back=PatientMain">Edit Details</a>   <br>
+            <a href="VisitationRecords?go_back=PatientMain">Visitation History and Upcoming Appointments</a> <br>
+            <a href="PrescriptionRecords?go_back=PatientMain">Prescription Records</a> <br>
     </body>
 </html>

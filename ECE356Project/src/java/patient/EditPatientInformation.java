@@ -5,6 +5,7 @@
 package patient;
 
 import databaseTools.Constants;
+import ece356.AdaptableHttpRequest;
 import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -133,6 +134,15 @@ public class EditPatientInformation extends HttpServlet {
                     out.close();
                 }
                 
+                return;
+            }
+                
+            if(request.getParameter("go_back") != null)
+            {
+                AdaptableHttpRequest addedRequest = new AdaptableHttpRequest(request);
+                addedRequest.addParameter("reload", "true");
+
+                request.getRequestDispatcher(request.getParameter("go_back")).forward(addedRequest, response);
                 return;
             }
             

@@ -123,7 +123,10 @@ public class CreatePatient extends HttpServlet {
         
         if(request.getParameter("go_back") != null)
         {
-            request.getRequestDispatcher(request.getParameter("go_back") + "?reload").forward(request, response);
+            AdaptableHttpRequest addedRequest = new AdaptableHttpRequest(request);
+            addedRequest.addParameter("reload", "true");
+            
+            request.getRequestDispatcher(request.getParameter("go_back")).forward(addedRequest, response);
             return;
         }
         

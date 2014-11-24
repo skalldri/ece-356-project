@@ -114,6 +114,15 @@ public class AssignPatient extends HttpServlet {
             return;
         }
         
+        if(request.getParameter("go_back") != null)
+        {
+            AdaptableHttpRequest addedRequest = new AdaptableHttpRequest(request);
+            addedRequest.addParameter("reload", "true");
+            
+            request.getRequestDispatcher(request.getParameter("go_back")).forward(addedRequest, response);
+            return;
+        }
+        
         if(((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("STAFF"))
         {
             request.getRequestDispatcher("StaffMain.jsp").forward(request, response);

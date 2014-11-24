@@ -14,8 +14,8 @@
     <body>
         <h1>Staff Main Page</h1>
         
-        <a href="CreatePatient.jsp">Create New Patient</a> <br/>
-        <a href="PrescriptionSearch.jsp">Prescription Search</a> <br/>
+        <a href="CreatePatient.jsp?go_back=StaffMain.jsp">Create New Patient</a> <br/>
+        <a href="PrescriptionSearch.jsp?go_back=StaffMain.jsp">Prescription Search</a> <br/>
         
         <br/><br/><br/>
         Patient Search:

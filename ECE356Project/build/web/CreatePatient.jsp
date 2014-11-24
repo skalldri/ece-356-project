@@ -25,7 +25,7 @@
              Health State: <input type="text" name="health_state" value="<%= request.getParameter("health_state") != null ? request.getParameter("health_state") : "" %>"> <br/>
              Comments: <input type="text" name="comments" value="<%= request.getParameter("comments") != null ? request.getParameter("comments") : "" %>"> <br/>
              Default doctor: <% if(!userData.getUserVariant().equals("STAFF")) { out.println(request.getParameter("default_doctor")); } %> <input <% if(!userData.getUserVariant().equals("STAFF")) { out.print(" hidden=\"true\" "); } %> type="text" name="default_doctor" value="<%=request.getParameter("default_doctor")%>"><br/>
-             
+             <input type="text" name="go_back" value="<%= request.getParameter("go_back")%>" hidden="true">
              <input type="submit">
          </form>
     </body>
