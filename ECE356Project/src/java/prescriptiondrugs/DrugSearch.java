@@ -44,6 +44,12 @@ public class DrugSearch extends HttpServlet {
         String minCost = request.getParameter("minCost");
         String maxCost = request.getParameter("maxCost");
         
+        String patient = request.getParameter("patient");
+        if (!(patient.equals("") || patient.equals("null")))
+        {
+            request.getSession().setAttribute("prescriptionPatient", patient);
+        }
+        
         boolean searchForName = !name.equals("");
         boolean searchForMin = !minCost.equals("0");
         boolean searchForMax = !maxCost.equals("0");

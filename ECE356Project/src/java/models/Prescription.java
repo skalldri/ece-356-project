@@ -15,9 +15,8 @@ public class Prescription {
     private String health_card;
     private String drug_name;
     private Integer refills;
-    private Date start_datetime;
-    private Date end_datetime;
-    private Date created_datetime;
+    private String start_datetime;
+    private String end_datetime;
 
     public String getDoctor_username() {
         return doctor_username;
@@ -35,29 +34,24 @@ public class Prescription {
         return refills;
     }
 
-    public Date getStart_datetime() {
+    public String getStart_datetime() {
         return start_datetime;
     }
 
-    public Date getEnd_datetime() {
+    public String getEnd_datetime() {
         return end_datetime;
-    }
-
-    public Date getCreated_datetime() {
-        return created_datetime;
     }
 
     public Prescription() {
     }
 
-    public Prescription(String doctor_username, String health_card, String drug_name, Integer refills, Date start_datetime, Date end_datetime, Date created_datetime) {
+    public Prescription(String doctor_username, String health_card, String drug_name, Integer refills, String start_datetime, String end_datetime) {
         this.doctor_username = doctor_username;
         this.health_card = health_card;
         this.drug_name = drug_name;
         this.refills = refills;
         this.start_datetime = start_datetime;
         this.end_datetime = end_datetime;
-        this.created_datetime = created_datetime;
     }
     
     

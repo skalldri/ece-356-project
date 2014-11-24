@@ -10,6 +10,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Drug Search</title>
+        <script src="jquery-1.11.1.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                var param = window.location.search.replace("?", "");
+                var ohip = param.substr(5); // chop off "ohip="
+                $("#patient").val(ohip);
+            });
+        </script>
+        
     </head>
     <body>
         <h1>Find a Drug</h1>
@@ -41,7 +50,7 @@
                         <td><input type="number" name="maxCost" min="0" value="0"/></td>
                     </tr>
                 </table>
-               
+                <input type="hidden" name="patient" id="patient" value="" />
                 <input type="submit" value="Search" />
             </form>
         </div>

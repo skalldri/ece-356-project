@@ -23,6 +23,7 @@
         <% request.getSession().setAttribute("userData", ud); %>
         <a href="PatientMain">Patient Test</a> <br>
 
-        <a href="DrugSearch.jsp">Drug Test</a>
+        <a href="DrugSearch.jsp">Drug Test</a> <br>
+        <a href="NewPrescription.jsp">Prescription Test</a>
     </body>
 </html>

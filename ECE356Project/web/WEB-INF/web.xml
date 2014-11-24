@@ -36,6 +36,10 @@
         <servlet-name>DrugSearch</servlet-name>
         <servlet-class>prescriptiondrugs.DrugSearch</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewPrescription</servlet-name>
+        <servlet-class>prescriptiondrugs.NewPrescription</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>DrugSearch</servlet-name>
         <url-pattern>/DrugSearch</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewPrescription</servlet-name>
+        <url-pattern>/NewPrescription</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
