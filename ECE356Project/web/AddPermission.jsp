@@ -12,6 +12,9 @@
         <title>Add Permission</title>
     </head>
     <body>
+        
+        <a href="<%= request.getParameter("go_back")%>">BACK</a> <br/>
+        
         <form method="post" action="AddPermission">
              Patient: <%= request.getParameter("patient") %> <input type="text" name="ohip" value="<%= request.getParameter("patient") %>" hidden="true"> <br/>
              Doctor Username: <input type="text" name="username"> <br/>             

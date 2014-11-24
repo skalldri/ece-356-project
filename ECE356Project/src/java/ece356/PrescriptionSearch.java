@@ -2,17 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package patient;
+package ece356;
 
 import databaseTools.Constants;
-import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -23,9 +21,9 @@ import models.Prescription;
 
 /**
  *
- * @author Bo
+ * @author stuart
  */
-public class PrescriptionRecords extends HttpServlet {
+public class PrescriptionSearch extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -39,17 +37,21 @@ public class PrescriptionRecords extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
-        String ohip = request.getParameter("ohip");
-        
-        if(((UserData)request.getSession().getAttribute("userData")).getUserType().equals("patient"))
+        //If user is logged in
+        if(request.getSession().getAttribute("userData") == null || !((UserData)request.getSession().getAttribute("userData")).getUserType().equals("staff"))
         {
-            ohip = ((UserData)request.getSession().getAttribute("userData")).getUsername();
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
         }
         
         Statement stmt;
         Connection con;
+        
+        String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();
+        String userVariant = ((UserData)request.getSession().getAttribute("userData")).getUserVariant();
+        
+        
         
         List<Prescription> prescriptions = new ArrayList<Prescription>();
         try
@@ -58,11 +60,33 @@ public class PrescriptionRecords extends HttpServlet {
             con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
             stmt = con.createStatement();
             
+            String restrict = " AND (default_doctor_username = '" + username + "' OR Patient.health_card in (SELECT health_card from Staff_Permissions WHERE username = '" + username + "'))";
+            
+            
             String query = new StringBuilder().
-                    append("SELECT * FROM Prescription WHERE health_card='").
-                    append(ohip).
-                    append("' AND deleted_datetime='0000-00-00 00:00:00'").
+                    append("SELECT * FROM (Prescription INNER JOIN Patient ON Prescription.health_card = Patient.health_card) WHERE Patient.health_card LIKE '%").
+                    append(request.getParameter("ohip")).
+                    append("%' AND drug_name LIKE '%").
+                    append(request.getParameter("drug")).
+                    append("%' AND Prescription.deleted_datetime='0000-00-00 00:00:00' AND Patient.deleted_datetime='0000-00-00 00:00:00'").
+                    append(restrict).
                     toString();
+            
+            if(((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("STAFF"))
+            {              
+                query = new StringBuilder().
+                    append("SELECT * FROM (Prescription INNER JOIN Patient ON Prescription.health_card = Patient.health_card) WHERE Patient.health_card LIKE '%").
+                    append(request.getParameter("ohip")).
+                    append("%' AND drug_name LIKE '%").
+                    append(request.getParameter("drug")).
+                    append("%' AND Prescription.deleted_datetime='0000-00-00 00:00:00' AND Patient.deleted_datetime='0000-00-00 00:00:00'").
+                    append(" AND (default_doctor_username in (SELECT supervisor_username from Supervisor WHERE staff_username = '").
+                    append(username).
+                    append("') OR Patient.health_card in (SELECT health_card from Staff_Permissions WHERE username = '").
+                    append(username).
+                    append("'))").
+                    toString();
+            }
             
             ResultSet rs = stmt.executeQuery(query);
             
@@ -84,27 +108,27 @@ public class PrescriptionRecords extends HttpServlet {
         }
         catch(Exception e)
         {
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Servlet PrescriptionSearch</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Servlet PrescriptionSearch at " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
             e.printStackTrace();
+            return;
         }
         
         request.getSession().setAttribute("prescriptions", prescriptions);
         
         request.getRequestDispatcher("PrescriptionRecords.jsp").forward(request, response);
-        
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PrescriptionRecords</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PrescriptionRecords at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

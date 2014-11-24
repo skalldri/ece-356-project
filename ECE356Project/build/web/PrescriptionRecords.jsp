@@ -60,6 +60,8 @@
     <body>
         <h1>Prescription Records</h1>
     
+        <a href="<%= request.getParameter("go_back")%>">BACK</a> <br/>
+        
         Show records
         <select id="filter">
             <option value="future">Unfinished Prescriptions</option>

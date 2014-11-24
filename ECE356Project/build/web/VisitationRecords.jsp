@@ -62,6 +62,9 @@
     
     <body>
         <h1>Visitation Records</h1>
+        
+        <a href="<%= request.getParameter("go_back")%>">BACK</a> <br/>
+        
         <br>
         Show records
         <select id="filter">

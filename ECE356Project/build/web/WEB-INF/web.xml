@@ -44,6 +44,10 @@
         <servlet-name>PrescriptionRecords</servlet-name>
         <servlet-class>patient.PrescriptionRecords</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreatePatient</servlet-name>
+        <servlet-class>ece356.CreatePatient</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>PrescriptionRecords</servlet-name>
         <url-pattern>/PrescriptionRecords</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreatePatient</servlet-name>
+        <url-pattern>/CreatePatient</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

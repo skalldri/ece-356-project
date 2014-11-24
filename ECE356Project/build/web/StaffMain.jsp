@@ -13,7 +13,10 @@
     </head>
     <body>
         <h1>Staff Main Page</h1>
-        <a href="CreatePatient.jsp">Create New Patient</a>
+        
+        <a href="CreatePatient.jsp">Create New Patient</a> <br/>
+        <a href="PrescriptionSearch.jsp">Prescription Search</a> <br/>
+        
         <br/><br/><br/>
         Patient Search:
          <form method="post" action="PatientSearch">
@@ -22,6 +25,8 @@
              Health card: <input type="text" name="ohip"> <br/>
              Phone: <input type="text" name="phone"> <br/>
              SIN: <input type="text" name="sin"> <br/>
+             Comments: <input type="text" name="comments"> <br/>
+             Diagnosis: <input type="text" name="diagnosis"> <br/>
              Last Visit date (not working yet): <input type="text" name="date"> <br/>
              <input type="submit">
          </form>

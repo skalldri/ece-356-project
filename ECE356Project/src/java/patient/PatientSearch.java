@@ -83,6 +83,10 @@ public class PatientSearch extends HttpServlet {
                     append(request.getParameter("name")).
                     append("%' AND phone_number LIKE '%").
                     append(request.getParameter("phone")).
+                    append("%' AND comments LIKE '%").
+                    append(request.getParameter("comments")).
+                    append("%' AND patient_health LIKE '%").
+                    append(request.getParameter("diagnosis")).
                     append("%' AND sin LIKE '%").
                     append(request.getParameter("sin")).
                     append("%'").
@@ -101,6 +105,10 @@ public class PatientSearch extends HttpServlet {
                     append(request.getParameter("name")).
                     append("%' AND phone_number LIKE '%").
                     append(request.getParameter("phone")).
+                    append("%' AND comments LIKE '%").
+                    append(request.getParameter("comments")).
+                    append("%' AND patient_health LIKE '%").
+                    append(request.getParameter("diagnosis")).
                     append("%' AND sin LIKE '%").
                     append(request.getParameter("sin")).
                     append("%'").

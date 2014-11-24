@@ -18,7 +18,6 @@
     <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
     
     <body>
-        
         <table border="1">
             <tr>
                 <th>Name</th>
@@ -50,10 +49,24 @@
                    out.println("<td>" + list.get(i).getDeleted_datetime() + "</td>");
                    if(list.get(i).editable)
                    {
-                       out.println("<td><a href=\"VisitationRecords?patient=" + list.get(i).getHealth_card() + "\">View</a></td>");
-                       out.println("<td><a href=\"PatientMain\">View</a></td><td><a href=\"AddPermission.jsp?patient=" + list.get(i).getHealth_card() + "\">Add</a></td>");
-                       out.println("<td><a href=\"AssignPatient.jsp?patient=" + list.get(i).getHealth_card() + "\">Assign</a></td>");
-                       out.println("<td><a href=\"CreatePatient.jsp?ohip=" + list.get(i).getHealth_card() + "&name=" + list.get(i).getName() + "&address=" + list.get(i).getAddress() + "&phone=" + list.get(i).getPhone_number() + "&health_state=" + list.get(i).getPatient_health() + "&sin=" + list.get(i).getSin() + "&comments=" + list.get(i).getComments() + "\">Edit</a></td>");
+                       out.println("<td><a href=\"VisitationRecords?go_back=PatientSearch.jsp&patient=" + list.get(i).getHealth_card() + "\">View</a></td>");
+                       out.println("<td><a href=\"PrescriptionRecords?go_back=PatientSearch.jsp&ohip=" + list.get(i).getHealth_card() + "\">View</a></td>");
+                       if(userData.getUserVariant().equals("DOCTOR"))
+                       {
+                           out.println("<td><a href=\"AddPermission.jsp?go_back=PatientSearch.jsp&patient=" + list.get(i).getHealth_card() + "\">Add</a></td>");
+                           out.println("<td><a href=\"AssignPatient.jsp?go_back=PatientSearch.jsp&patient=" + list.get(i).getHealth_card() + "\">Assign</a></td>");
+                       } else {
+                           out.println("<td>Not Available</td>");
+                           out.println("<td>Not Available</td>");
+                       }
+                       
+                       out.println("<td><a href=\"CreatePatient.jsp?go_back=PatientSearch.jsp&ohip=" + list.get(i).getHealth_card() + "&name=" + list.get(i).getName() + "&address=" + list.get(i).getAddress() + "&phone=" + list.get(i).getPhone_number() + "&health_state=" + list.get(i).getPatient_health() + "&sin=" + list.get(i).getSin() + "&default_doctor=" + list.get(i).getDefault_doctor_username() + "&comments=" + list.get(i).getComments() + "\">Edit</a></td>");
+                   } else {
+                       out.println("<td>Not Available</td>");
+                       out.println("<td>Not Available</td>");
+                       out.println("<td>Not Available</td>");
+                       out.println("<td>Not Available</td>");
+                       out.println("<td>Not Available</td>");
                    }
                    out.println("</tr>");
                 }

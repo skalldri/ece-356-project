@@ -13,6 +13,9 @@
     </head>
     <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>  
     <body>
+        
+        <a href="<%= request.getParameter("go_back")%>">BACK</a> <br/>
+        
         <form method="post" action="CreatePatient">
              Name: <input type="text" name="name" value="<%= request.getParameter("name") != null ? request.getParameter("name") : "" %>"> <br/>
              Health card: <input type="text" name="ohip" value="<%= request.getParameter("ohip") != null ? request.getParameter("ohip") : "" %>"> <br/>
@@ -21,13 +24,7 @@
              Address: <input type="text" name="address" value="<%= request.getParameter("address") != null ? request.getParameter("address") : "" %>"> <br/>
              Health State: <input type="text" name="health_state" value="<%= request.getParameter("health_state") != null ? request.getParameter("health_state") : "" %>"> <br/>
              Comments: <input type="text" name="comments" value="<%= request.getParameter("comments") != null ? request.getParameter("comments") : "" %>"> <br/>
-             
-             <%
-                if(!userData.getUserVariant().equals("DOCTOR"))
-                {
-                    out.println("Default doctor: <input type=\"text\" name=\"default_doctor\"><br/>");
-                }
-             %>
+             Default doctor: <% if(!userData.getUserVariant().equals("STAFF")) { out.println(request.getParameter("default_doctor")); } %> <input <% if(!userData.getUserVariant().equals("STAFF")) { out.print(" hidden=\"true\" "); } %> type="text" name="default_doctor" value="<%=request.getParameter("default_doctor")%>"><br/>
              
              <input type="submit">
          </form>
