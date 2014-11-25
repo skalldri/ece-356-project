@@ -33,7 +33,7 @@
                 for(int i = 0; i < list.size(); i++)
                 {             
                    out.println("<tr><td>" + list.get(i) + "</td>");
-                   out.println("<td><a href=\"ModifySupervisor?action=delete&staff=" + list.get(i) + "\">DELETE</a></td>");
+                   out.println("<td><a href=\"ModifySupervisor?go_back=" + request.getParameter("go_back") + "&action=delete&staff=" + list.get(i) + "\">DELETE</a></td>");
                    out.println("</tr>");
                 }
             %>
@@ -45,6 +45,7 @@
         <form method="post" action="ModifySupervisor">
              Staff Username: <input type="text" name="staff"> <br/>
              <input type="text" name="action" value="add" hidden="true">
+             <input type="text" name="go_back" value="<%= request.getParameter("go_back")%>?reload" hidden="true">
              <input type="submit">
          </form>   
     </body>

@@ -74,6 +74,7 @@
             <thead>
                 <tr>
                     <th>Prescriber</th>
+                    <th>Patient</th>
                     <th>Drug Name</th>
                     <th>Refills</th>
                     <th>Start Time</th>
@@ -85,6 +86,7 @@
                 <%  for (Prescription p : prescriptions) { %>
                     <tr class="dataRows">
                         <td><%= p.getDoctor_username() %></td>
+                        <td><%= p.getHealth_card() %></td>
                         <td><%= p.getDrug_name() %></td>
                         <td><%= p.getRefills() %></td>
                         <td><%= DateFormat.getDateInstance().format(p.getStart_datetime()) %></td>

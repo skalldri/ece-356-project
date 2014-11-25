@@ -49,16 +49,20 @@
         <servlet-class>ece356.CreatePatient</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AddPermission</servlet-name>
+        <servlet-class>ece356.AddPermission</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>PrescriptionSearch</servlet-name>
         <servlet-class>ece356.PrescriptionSearch</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddSupervisor</servlet-name>
-        <servlet-class>ece356.AddSupervisor</servlet-class>
+        <servlet-name>AssignPatient</servlet-name>
+        <servlet-class>ece356.AssignPatient</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DeleteSupervisor</servlet-name>
-        <servlet-class>ece356.DeleteSupervisor</servlet-class>
+        <servlet-name>EditAppointment</servlet-name>
+        <servlet-class>ece356.EditAppointment</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ModifySupervisor</servlet-name>
@@ -113,16 +117,20 @@
         <url-pattern>/CreatePatient</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>AddPermission</servlet-name>
+        <url-pattern>/AddPermission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>PrescriptionSearch</servlet-name>
         <url-pattern>/PrescriptionSearch</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AddSupervisor</servlet-name>
-        <url-pattern>/AddSupervisor</url-pattern>
+        <servlet-name>AssignPatient</servlet-name>
+        <url-pattern>/AssignPatient</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DeleteSupervisor</servlet-name>
-        <url-pattern>/DeleteSupervisor</url-pattern>
+        <servlet-name>EditAppointment</servlet-name>
+        <url-pattern>/EditAppointment</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ModifySupervisor</servlet-name>

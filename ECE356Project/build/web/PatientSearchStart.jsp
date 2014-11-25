@@ -34,8 +34,8 @@
              Comments: <input type="text" name="comments"> <br/>
              Diagnosis: <input type="text" name="diagnosis"> <br/>
                 
-             Last visit date after: <input type="date" name="start_datetime" /> <br/>
-             Last visit date before: <input type="date" name="end_datetime" /> <br/>
+             Had visit after: <input type="date" name="start_datetime" /> <br/>
+             Had visit before: <input type="date" name="end_datetime" /> <br/>
              
              <input type="submit">
          </form>   
