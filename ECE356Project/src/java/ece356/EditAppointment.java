@@ -82,7 +82,7 @@ public class EditAppointment extends HttpServlet {
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<html>");
                 out.println("<head>");
-                out.println("<title>CreatePatient</title>");            
+                out.println("<title>Edit Appointment</title>");            
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
