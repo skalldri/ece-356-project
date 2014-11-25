@@ -57,7 +57,7 @@
                    out.println("<td>" + list.get(i).getSin() + "</td>");
                    out.println("<td>" + list.get(i).getComments() + "</td>");
                    out.println("<td>" + list.get(i).getPatient_health() + "</td>");
-                   out.println("<td>" + list.get(i).getDeleted_datetime() + "</td>");
+                   out.println("<td>" + (list.get(i).getDeleted_datetime() != null ? list.get(i).getDeleted_datetime() : "STILL VALID") + "</td>");
                    if(list.get(i).editable)
                    {
                        out.println("<td><a href=\"VisitationRecords?go_back=PatientSearch&patient=" + list.get(i).getHealth_card() + "\">View</a></td>");

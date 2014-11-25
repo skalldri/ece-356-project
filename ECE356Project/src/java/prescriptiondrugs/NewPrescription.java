@@ -5,6 +5,7 @@
 package prescriptiondrugs;
 
 import databaseTools.Constants;
+import ece356.AdaptableHttpRequest;
 import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -213,6 +214,14 @@ public class NewPrescription extends HttpServlet {
         
         // clear the temp user saved so next time wont show up again
         request.getSession().setAttribute("prescriptionPatient", null);
+        
+        if(request.getParameter("reload") != null)
+        {
+            AdaptableHttpRequest r = new AdaptableHttpRequest(request);
+            r.addParameter("go_back", (String)request.getSession().getAttribute("new_prescription_go_back"));
+            request.getRequestDispatcher("NewPrescription.jsp").forward(r, response);
+            return;
+        }
         
         request.getRequestDispatcher("NewPrescription.jsp").forward(request, response);
     }

@@ -23,7 +23,7 @@
          
          <a href="PatientSearchStart.jsp?go_back=doctor_home.jsp">Patient Search</a> <br/><br/>
          <a href="ModifySupervisor">Modify Supervised Employees</a> <br/><br/>
-         <a href="NewPrescription.jsp">Create Prescription</a> <br/>
+         <a href="NewPrescription.jsp?go_back=doctor_home.jsp">Create Prescription</a> <br/>
          <a href="PrescriptionSearch.jsp?go_back=doctor_home.jsp">Prescription Search</a> <br/>
     </body>
 </html>

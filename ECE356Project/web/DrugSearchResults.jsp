@@ -21,7 +21,7 @@
                     
                     var drug_name = row.find("#name").text();
                     
-                    window.location.href = "NewPrescription.jsp?drug=" + drug_name + 
+                    window.location.href = "NewPrescription.jsp?reload=true&drug=" + drug_name + 
                         "&ohip=" + $("#patient").val();
                 });
                 
@@ -40,6 +40,8 @@
     </head>
     <body>
         <h1>Drug Search Results</h1>
+        
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         
         <input type="text" id="search" placeholder="Filter more">
         

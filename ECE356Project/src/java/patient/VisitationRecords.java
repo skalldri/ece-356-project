@@ -5,6 +5,7 @@
 package patient;
 
 import databaseTools.Constants;
+import ece356.AdaptableHttpRequest;
 import ece356.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -56,13 +57,28 @@ public class VisitationRecords extends HttpServlet {
         }
         else // We're a doctor looking for a patient's records
         {
-            ohip = request.getParameter("patient");
+            if(request.getParameter("reload") != null)
+            {
+                ohip = (String)request.getSession().getAttribute("ohip_visit");
+            } else {
+                ohip = request.getParameter("patient");
+                request.getSession().setAttribute("ohip_visit", ohip);
+                request.getSession().setAttribute("visit_go_back", request.getParameter("go_back"));
+            }
         }
         
         List<Visit> visits = fetchVisits(ohip);
         
         request.getSession().setAttribute("visits", visits);
         
+        if(request.getParameter("reload") != null)
+        {
+            AdaptableHttpRequest r = new AdaptableHttpRequest(request);
+            r.addParameter("go_back", (String)request.getSession().getAttribute("visit_go_back"));
+            request.getRequestDispatcher("VisitationRecords.jsp").forward(r, response);
+            return;
+        }
+                
         request.getRequestDispatcher("VisitationRecords.jsp").forward(request, response);
     }
 
