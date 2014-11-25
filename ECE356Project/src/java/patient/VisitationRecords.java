@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -65,6 +66,68 @@ public class VisitationRecords extends HttpServlet {
         request.getRequestDispatcher("VisitationRecords.jsp").forward(request, response);
     }
 
+    public static Visit retrieveVisit(String doctor_username, Timestamp start_datetime, Timestamp end_datetime, String health_card, String diagnosis, String procedure_description, Double procedure_cost, String scheduling_of_treatment, Timestamp created_datetime) {
+        Visit visit = null;
+        
+        Statement stmt;
+        Connection con;
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+            stmt = con.createStatement();
+            
+            String query = new StringBuilder().
+                    append("SELECT * FROM Visit WHERE doctor_username = '").
+                    append(doctor_username).
+                    append("' AND start_datetime = '").
+                    append(start_datetime.toString()).
+                    append("' AND end_datetime = '").
+                    append(end_datetime.toString()).
+                    append("' AND health_card = '").
+                    append(health_card).
+                    append("' AND diagnosis = '").
+                    append(diagnosis).
+                    append("' AND procedure_description = '").
+                    append(procedure_description).
+                    append("' AND procedure_cost = '").
+                    append(procedure_cost).
+                    append("' AND scheduling_of_treatment = '").
+                    append(scheduling_of_treatment).
+                    append("' AND created_datetime = '").
+                    append(created_datetime.toString()).
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00' LIMIT 1").
+                    toString();
+            
+            ResultSet result = stmt.executeQuery(query);
+
+            if (!result.next())
+                return visit;
+
+            visit = new Visit(
+                    result.getNString("doctor_username"),
+                    result.getTimestamp("start_datetime"), 
+                    result.getTimestamp("end_datetime"),
+                    result.getNString("health_card"),
+                    result.getNString("diagnosis"),
+                    result.getNString("procedure_description"),
+                    result.getDouble("procedure_cost"),
+                    result.getNString("scheduling_of_treatment"),
+                    result.getTimestamp("created_datetime"),
+                    result.getTimestamp("deleted_datetime"));
+            
+            con.close();
+            
+        }
+        catch(Exception e) 
+        {
+            String exception = e.toString();
+            return new Visit(null, null, null, null, null, null, null, null, null, null);
+        }
+        
+        return visit;
+    }
+    
     private List<Visit> fetchVisits(String ohip) {
         List<Visit> visits = new ArrayList<Visit>();
                  

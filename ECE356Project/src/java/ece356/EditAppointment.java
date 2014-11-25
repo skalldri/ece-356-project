@@ -8,14 +8,19 @@ import databaseTools.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.Patient;
+import models.Visit;
 import patient.PatientMain;
+import patient.VisitationRecords;
 
 /**
  *
@@ -57,7 +62,21 @@ public class EditAppointment extends HttpServlet {
                 username = request.getParameter("default_doctor");
             }
             
-            Patient p = PatientMain.retrievePatient(request.getParameter("ohip"));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+            Timestamp start_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("startdate") + " " + request.getParameter("starttime")).getTime());
+            Timestamp end_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("enddate") + " " + request.getParameter("endtime")).getTime());
+            Timestamp created_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("createdate") + " " + request.getParameter("createtime")).getTime());
+            
+            Visit visit = VisitationRecords.retrieveVisit(
+                    request.getParameter("doctor_username"), 
+                    start_datetime,
+                    end_datetime, 
+                    request.getParameter("health_card"),
+                    request.getParameter("diagnosis"), 
+                    request.getParameter("procedure_description"), 
+                    Double.parseDouble(request.getParameter("procedure_cost")), 
+                    request.getParameter("scheduling_of_treatment"), 
+                    created_datetime);
             
             java.util.Date now = new java.util.Date();
             String formattedDate = PatientMain.formatSqlDate(now);
