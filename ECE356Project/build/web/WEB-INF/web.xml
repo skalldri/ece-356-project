@@ -52,6 +52,18 @@
         <servlet-name>PrescriptionSearch</servlet-name>
         <servlet-class>ece356.PrescriptionSearch</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddSupervisor</servlet-name>
+        <servlet-class>ece356.AddSupervisor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteSupervisor</servlet-name>
+        <servlet-class>ece356.DeleteSupervisor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModifySupervisor</servlet-name>
+        <servlet-class>ece356.ModifySupervisor</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -103,6 +115,18 @@
     <servlet-mapping>
         <servlet-name>PrescriptionSearch</servlet-name>
         <url-pattern>/PrescriptionSearch</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddSupervisor</servlet-name>
+        <url-pattern>/AddSupervisor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteSupervisor</servlet-name>
+        <url-pattern>/DeleteSupervisor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModifySupervisor</servlet-name>
+        <url-pattern>/ModifySupervisor</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -14,29 +14,29 @@
         <script src="jquery-1.11.1.min.js"></script>
         <script>
             $(document).ready(function() {
-                var param = window.location.search.replace("?", "");
+                //var param = window.location.search.replace("?", "");
                 
-                var drugStart = param.indexOf("drug=") + 5;
-                var drugEnd = param.indexOf("&", drugStart);
-                
-                // case of did not find & after drug, can go to end of string
-                if (drugEnd < drugStart) {
-                    $("#drug_name").val(param.substr(drugStart));
-                }
-                else {
-                    $("#drug_name").val(param.substr(drugStart, drugEnd - drugStart));
-                }
-                
-                var ohipStart = param.indexOf("ohip=") + 5;
-                var ohipEnd = param.indexOf("&", ohipStart);
+                //var drugStart = param.indexOf("drug=") + 5;
+                //var drugEnd = param.indexOf("&", drugStart);
                 
                 // case of did not find & after drug, can go to end of string
-                if (ohipEnd < ohipStart) {
-                    $("#health_card").val(param.substr(ohipStart));
-                }
-                else {
-                    $("#health_card").val(param.substr(ohipStart, ohipEnd - ohipStart));
-                }
+                //if (drugEnd < drugStart) {
+                //    $("#drug_name").val(param.substr(drugStart));
+                //}
+                //else {
+                //    $("#drug_name").val(param.substr(drugStart, drugEnd - drugStart));
+                //}
+                
+                //var ohipStart = param.indexOf("ohip=") + 5;
+                //var ohipEnd = param.indexOf("&", ohipStart);
+                
+                // case of did not find & after drug, can go to end of string
+                //if (ohipEnd < ohipStart) {
+                //    $("#health_card").val(param.substr(ohipStart));
+                //}
+                //else {
+                //    $("#health_card").val(param.substr(ohipStart, ohipEnd - ohipStart));
+                //}
                 
                 
                 $("#drugSelect").click(function(e) {
@@ -51,17 +51,18 @@
         <h1>New Prescription</h1>
         <jsp:useBean id="mostRecentPrescription" class="models.Prescription" scope="session" />
         
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         
         <form method="post" action="NewPrescription">
             <table>
                 <tr>
                     <td>Patient Health Card</td>
                     
-                    <td><input type="text" name="health_card" id="health_card" value="" /></td>
+                    <td><input type="text" name="health_card" id="health_card" value="<%= request.getParameter("ohip") != null ? request.getParameter("ohip") : "" %>" /></td>
                 </tr>
                 <tr>
                     <td>Drug Name</td>
-                    <td><input type="text" name="drug_name" id="drug_name" value="" /></td>
+                    <td><input type="text" name="drug_name" id="drug_name" value="<%= request.getParameter("drug") != null ? request.getParameter("drug") : "" %>" /></td>
                     <td><button id="drugSelect">Select Drug</button></td>
                 </tr>
                 <tr>

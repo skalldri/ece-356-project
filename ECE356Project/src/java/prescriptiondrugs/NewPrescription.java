@@ -64,7 +64,7 @@ public class NewPrescription extends HttpServlet {
             String query = new StringBuilder().
                     append("SELECT * FROM Patient WHERE health_card='").
                     append(ohip).
-                    append("' and deleted_datetime IS 0000-00-00 00:00:00").
+                    append("' and deleted_datetime = '0000-00-00 00:00:00'").
                     toString();
             
             ResultSet rs = stmt.executeQuery(query);
@@ -85,7 +85,7 @@ public class NewPrescription extends HttpServlet {
                         append(doctorUsername).
                         append("' AND health_card='").
                         append(ohip).
-                        append("' AND deleted_datetime IS 0000-00-00 00:00:00").
+                        append("' AND deleted_datetime = '0000-00-00 00:00:00'").
                         toString();
                 
                 rs = stmt.executeQuery(query);
@@ -98,7 +98,22 @@ public class NewPrescription extends HttpServlet {
         }
         catch(Exception e)
         {
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>NewPrescription</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Error: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
             
+            return;
         }
         
         if (!hasPermission)
@@ -116,7 +131,7 @@ public class NewPrescription extends HttpServlet {
             String query = new StringBuilder().
                     append("SELECT * FROM Drug WHERE drug_name='").
                     append(drug).
-                    append("' AND deleted_datetime IS 0000-00-00 00:00:00").
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00'").
                     toString();
             
             ResultSet rs = stmt.executeQuery(query);
@@ -128,7 +143,22 @@ public class NewPrescription extends HttpServlet {
         }
         catch(Exception e)
         {
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>NewPrescription</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Error: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
             
+            return;
         }
         
         // add to db
@@ -163,28 +193,28 @@ public class NewPrescription extends HttpServlet {
         }
         catch (Exception e) 
         {
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>NewPrescription</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Error: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
             
+            return;
         }
         
         // clear the temp user saved so next time wont show up again
         request.getSession().setAttribute("prescriptionPatient", null);
         
         request.getRequestDispatcher("NewPrescription.jsp").forward(request, response);
-        
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NewPrescription</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet NewPrescription at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

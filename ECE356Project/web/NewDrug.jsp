@@ -37,6 +37,9 @@
     </head>
     <body>
         <h1>Enter New Drug Info</h1>
+        
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
+        
         <div id="message">
             
         </div>

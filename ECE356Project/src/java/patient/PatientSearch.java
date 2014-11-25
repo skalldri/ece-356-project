@@ -111,7 +111,7 @@ public class PatientSearch extends HttpServlet {
             if(!myData.all_patients)
             {
                 editable = true;
-                default_doctor = " AND (default_doctor_username = '" + username + "' OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '" + username + "'))";
+                default_doctor = " AND (default_doctor_username = '" + username + "' OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '" + username + "' AND deleted_datetime = '0000-00-00 00:00:00'))";
             }
             
             if(!myData.deleted_records)
@@ -140,9 +140,9 @@ public class PatientSearch extends HttpServlet {
                 query = new StringBuilder().
                     append("SELECT * FROM Patient WHERE (default_doctor_username in (SELECT supervisor_username from Supervisor WHERE staff_username = '").
                     append(username).    
-                    append("') OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '").
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00') OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '").
                     append(username).
-                    append("')) AND name LIKE '%").
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00')) AND name LIKE '%").
                     append(request.getParameter("name")).
                     append("%' AND phone_number LIKE '%").
                     append(request.getParameter("phone")).

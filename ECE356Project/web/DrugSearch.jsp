@@ -22,8 +22,9 @@
     </head>
     <body>
         <h1>Find a Drug</h1>
+        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         
-        <a href="NewDrug.jsp">Enter New Drug</a>
+        <a href="NewDrug.jsp?go_back=DrugSearch.jsp">Enter New Drug</a>
         
         <div id="searchArea">
             <h2>Search Parameters</h2>

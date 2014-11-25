@@ -60,7 +60,7 @@ public class PrescriptionSearch extends HttpServlet {
             con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
             stmt = con.createStatement();
             
-            String restrict = " AND (default_doctor_username = '" + username + "' OR Patient.health_card in (SELECT health_card from Staff_Permissions WHERE username = '" + username + "'))";
+            String restrict = " AND (default_doctor_username = '" + username + "' OR Patient.health_card in (SELECT health_card from Staff_Permissions WHERE username = '" + username + "' AND deleted_datetime = '0000-00-00 00:00:00'))";
             
             
             String query = new StringBuilder().
@@ -82,9 +82,9 @@ public class PrescriptionSearch extends HttpServlet {
                     append("%' AND Prescription.deleted_datetime='0000-00-00 00:00:00' AND Patient.deleted_datetime='0000-00-00 00:00:00'").
                     append(" AND (default_doctor_username in (SELECT supervisor_username from Supervisor WHERE staff_username = '").
                     append(username).
-                    append("') OR Patient.health_card in (SELECT health_card from Staff_Permissions WHERE username = '").
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00') OR Patient.health_card in (SELECT health_card from Staff_Permissions WHERE username = '").
                     append(username).
-                    append("'))").
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00'))").
                     toString();
             }
             

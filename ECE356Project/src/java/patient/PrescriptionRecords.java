@@ -84,27 +84,27 @@ public class PrescriptionRecords extends HttpServlet {
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>PrescriptionRecords</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Error: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
+            
+            return;
         }
         
         request.getSession().setAttribute("prescriptions", prescriptions);
         
         request.getRequestDispatcher("PrescriptionRecords.jsp").forward(request, response);
-        
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PrescriptionRecords</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PrescriptionRecords at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

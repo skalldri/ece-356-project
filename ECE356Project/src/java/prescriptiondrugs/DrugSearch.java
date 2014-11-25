@@ -116,26 +116,26 @@ public class DrugSearch extends HttpServlet {
         
         catch(Exception e)
         {
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>DrugSearch</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Error: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
             
+            return;
         }
         
         request.getSession().setAttribute("drugSearchResults", drugs);
         request.getRequestDispatcher("DrugSearchResults.jsp").forward(request, response);
-        
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DrugSearch</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DrugSearch at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
