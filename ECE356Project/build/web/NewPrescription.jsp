@@ -13,35 +13,10 @@
         
         <script src="jquery-1.11.1.min.js"></script>
         <script>
-            $(document).ready(function() {
-                //var param = window.location.search.replace("?", "");
-                
-                //var drugStart = param.indexOf("drug=") + 5;
-                //var drugEnd = param.indexOf("&", drugStart);
-                
-                // case of did not find & after drug, can go to end of string
-                //if (drugEnd < drugStart) {
-                //    $("#drug_name").val(param.substr(drugStart));
-                //}
-                //else {
-                //    $("#drug_name").val(param.substr(drugStart, drugEnd - drugStart));
-                //}
-                
-                //var ohipStart = param.indexOf("ohip=") + 5;
-                //var ohipEnd = param.indexOf("&", ohipStart);
-                
-                // case of did not find & after drug, can go to end of string
-                //if (ohipEnd < ohipStart) {
-                //    $("#health_card").val(param.substr(ohipStart));
-                //}
-                //else {
-                //    $("#health_card").val(param.substr(ohipStart, ohipEnd - ohipStart));
-                //}
-                
-                
+            $(document).ready(function() {           
                 $("#drugSelect").click(function(e) {
                     e.preventDefault();
-                    window.location.href = "DrugSearch.jsp?ohip=" + $("#health_card").val(); 
+                    window.location.href = "DrugSearch.jsp?go_back=NewPrescription.jsp&ohip=" + $("#health_card").val(); 
                 });
             });
         </script>
@@ -51,14 +26,21 @@
         <h1>New Prescription</h1>
         <jsp:useBean id="mostRecentPrescription" class="models.Prescription" scope="session" />
         
-        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
+        <%
+        if(request.getParameter("reload") == null)
+        {
+            request.getSession().setAttribute("new_prescription_go_back", request.getParameter("go_back"));
+        }
+        %>
+        
+        <br/> <a href="<%= request.getParameter("reload") != null ? (String)request.getSession().getAttribute("new_prescription_go_back") : request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
         
         <form method="post" action="NewPrescription">
             <table>
                 <tr>
                     <td>Patient Health Card</td>
                     
-                    <td><input type="text" name="health_card" id="health_card" value="<%= request.getParameter("ohip") != null ? request.getParameter("ohip") : "" %>" /></td>
+                    <td><input type="text" name="health_card" id="health_card" value="<%= request.getParameter("ohip") != null && !request.getParameter("ohip").equals("null") ? request.getParameter("ohip") : "" %>" /></td>
                 </tr>
                 <tr>
                     <td>Drug Name</td>
@@ -78,7 +60,7 @@
                     <td><input type="date" name="end_datetime" /></td>
                 </tr>
             </table>
-                    
+            <input type="text" name="go_back" value="<%= request.getParameter("reload") != null ? (String)request.getSession().getAttribute("new_prescription_go_back") : request.getParameter("go_back")%>" hidden="true">        
             <input type="submit" value="Create Prescription" />
         </form>
     </body>

@@ -12,17 +12,17 @@
         <title>Drug Search</title>
         <script src="jquery-1.11.1.min.js"></script>
         <script>
-            $(document).ready(function() {
-                var param = window.location.search.replace("?", "");
-                var ohip = param.substr(5); // chop off "ohip="
-                $("#patient").val(ohip);
-            });
+            //$(document).ready(function() {
+            //    var param = window.location.search.replace("?", "");
+            //    var ohip = param.substr(5); // chop off "ohip="
+            //    $("#patient").val(ohip);
+            //});
         </script>
         
     </head>
     <body>
         <h1>Find a Drug</h1>
-        <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
+        <br/> <a href="NewPrescription.jsp?reload">BACK</a> <br/><br/>
         
         <a href="NewDrug.jsp?go_back=DrugSearch.jsp">Enter New Drug</a>
         
@@ -51,7 +51,8 @@
                         <td><input type="number" name="maxCost" min="0" value="0"/></td>
                     </tr>
                 </table>
-                <input type="hidden" name="patient" id="patient" value="" />
+                <input type="text" name="go_back" value="DrugSearch.jsp" hidden="true">
+                <input type="hidden" name="patient" id="patient" value="<%= request.getParameter("ohip") != null ? request.getParameter("ohip") : "" %>" />
                 <input type="submit" value="Search" />
             </form>
         </div>
