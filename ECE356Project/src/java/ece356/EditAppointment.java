@@ -4,12 +4,18 @@
  */
 package ece356;
 
+import databaseTools.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Patient;
+import patient.PatientMain;
 
 /**
  *
@@ -29,20 +35,84 @@ public class EditAppointment extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditAppointment</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditAppointment at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
+        
+        //If user is logged in
+        if(request.getSession().getAttribute("userData") == null || !((UserData)request.getSession().getAttribute("userData")).getUserType().equals("staff"))
+        {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
+        }
+        
+        String username = ((UserData)request.getSession().getAttribute("userData")).getUsername();         
+        Statement stmt;
+        Connection con;
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+            stmt = con.createStatement();
+            
+            if(request.getParameter("default_doctor") != null)
+            {
+                username = request.getParameter("default_doctor");
+            }
+            
+            Patient p = PatientMain.retrievePatient(request.getParameter("ohip"));
+            
+            java.util.Date now = new java.util.Date();
+            String formattedDate = PatientMain.formatSqlDate(now);
+            //ToDo: Query
+            String modifyQuery = new StringBuilder().
+                        toString();
+                
+            int result = stmt.executeUpdate(modifyQuery);
+            
+            String insertQuery = new StringBuilder().
+                        toString();
+            
+            stmt.executeUpdate(insertQuery);
+            
+            con.close();    
+        }
+        catch(Exception e) 
+        {
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>CreatePatient</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            } finally {            
+                out.close();
+            }
+            return;
+        }
+        
+        if(request.getParameter("go_back") != null)
+        {
+            AdaptableHttpRequest addedRequest = new AdaptableHttpRequest(request);
+            addedRequest.addParameter("reload", "true");
+            
+            request.getRequestDispatcher(request.getParameter("go_back")).forward(addedRequest, response);
+            return;
+        }
+        
+        if(((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("STAFF"))
+        {
+            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
+        }
+        else if (((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("DOCTOR"))
+        {
+            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
+        } else
+        {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
     }
 
