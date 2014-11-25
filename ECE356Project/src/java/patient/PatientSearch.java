@@ -92,6 +92,8 @@ public class PatientSearch extends HttpServlet {
             myData.comments = request.getParameter("comments");
             myData.diagnosis = request.getParameter("diagnosis");
             myData.sin = request.getParameter("sin");
+            myData.lastVisitStart = request.getParameter("start_datetime");
+            myData.lastVisitEnd = request.getParameter("end_datetime");
             
             request.getSession().setAttribute("patientSearchData", myData);
         }
@@ -106,6 +108,9 @@ public class PatientSearch extends HttpServlet {
             
             String default_doctor = "";
             String deleted_records = "";
+            String start_date = "";
+            String end_date = "";
+            String date = "";
             boolean editable = false;
             
             if(!myData.all_patients)
@@ -117,6 +122,22 @@ public class PatientSearch extends HttpServlet {
             if(!myData.deleted_records)
             {
                 deleted_records = " AND deleted_datetime = '0000-00-00 00:00:00'";
+            }
+            
+            if(!myData.lastVisitEnd.isEmpty())
+            {
+                start_date = " AND start_datetime <= '" + myData.lastVisitEnd + " 23:59:59" + "'";
+            }
+            
+            if(!myData.lastVisitStart.isEmpty())
+            {
+                end_date = " AND start_datetime >= '" + myData.lastVisitStart + " 00:00:00" + "'";
+            }
+            
+            if(!myData.lastVisitEnd.isEmpty() || !myData.lastVisitStart.isEmpty())
+            {
+                //TODO: Fix query to use specific query for Visit table in default_doctor's place
+                date = " AND EXISTS (SELECT start_datetime FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00'" + default_doctor + start_date + end_date + ")";
             }
             
             String query = new StringBuilder().

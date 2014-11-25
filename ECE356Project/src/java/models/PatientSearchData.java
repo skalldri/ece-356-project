@@ -15,5 +15,7 @@ public class PatientSearchData {
     public String phone = "";
     public String comments = "";
     public String diagnosis = "";
-    public String sin = "";   
+    public String sin = ""; 
+    public String lastVisitStart = "";
+    public String lastVisitEnd = "";
 }
