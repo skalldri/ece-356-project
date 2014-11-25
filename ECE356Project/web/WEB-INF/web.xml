@@ -68,6 +68,14 @@
         <servlet-name>ModifySupervisor</servlet-name>
         <servlet-class>ece356.ModifySupervisor</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DoctorList</servlet-name>
+        <servlet-class>staff.DoctorList</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FinanceLists</servlet-name>
+        <servlet-class>staff.FinanceLists</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -135,6 +143,14 @@
     <servlet-mapping>
         <servlet-name>ModifySupervisor</servlet-name>
         <url-pattern>/ModifySupervisor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoctorList</servlet-name>
+        <url-pattern>/DoctorList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinanceLists</servlet-name>
+        <url-pattern>/FinanceLists</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
