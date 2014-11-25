@@ -62,7 +62,7 @@ public class EditAppointment extends HttpServlet {
                 username = request.getParameter("default_doctor");
             }
             
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             Timestamp start_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("startdate") + " " + request.getParameter("starttime")).getTime());
             Timestamp end_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("enddate") + " " + request.getParameter("endtime")).getTime());
             Timestamp created_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("createdate") + " " + request.getParameter("createtime")).getTime());
@@ -72,10 +72,10 @@ public class EditAppointment extends HttpServlet {
                     start_datetime,
                     end_datetime, 
                     request.getParameter("health_card"),
-                    request.getParameter("diagnosis"), 
-                    request.getParameter("procedure_description"), 
-                    Double.parseDouble(request.getParameter("procedure_cost")), 
-                    request.getParameter("scheduling_of_treatment"), 
+                    request.getParameter("diagnosis") != null ? request.getParameter("diagnosis") : "", 
+                    request.getParameter("procedure_description") != null ? request.getParameter("procedure_description") : "", 
+                    Double.valueOf(request.getParameter("procedure_cost")), 
+                    request.getParameter("scheduling_of_treatment") != null ? request.getParameter("scheduling_of_treatment") : "", 
                     created_datetime);
             
             java.util.Date now = new java.util.Date();

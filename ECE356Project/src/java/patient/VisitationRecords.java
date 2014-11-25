@@ -148,9 +148,7 @@ public class VisitationRecords extends HttpServlet {
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next())
-            {
-                Double cost = result.getDouble("procedure_cost");
-                
+            {                
                 visits.add(
                         new Visit(
                             result.getNString("doctor_username"), 
@@ -159,7 +157,7 @@ public class VisitationRecords extends HttpServlet {
                             ohip, 
                             result.getNString("diagnosis"), 
                             result.getNString("procedure_description"), 
-                            cost == 0.0d ? null : cost,
+                            result.getDouble("procedure_cost"),
                             result.getNString("scheduling_of_treatment"), 
                             result.getTimestamp("created_datetime"),
                             result.getTimestamp("created_datetime"))
