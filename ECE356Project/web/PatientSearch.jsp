@@ -18,6 +18,17 @@
     <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
     
     <body>
+        
+        <%
+        if(userData.getUserVariant().equals("DOCTOR"))
+        {
+            out.println("<br/> <a href=\"PatientSearchStart.jsp?go_back=doctor_home.jsp\">BACK</a> <br/><br/>");
+        } else if(userData.getUserVariant().equals("STAFF"))
+        {
+            out.println("<br/> <a href=\"PatientSearchStart.jsp?go_back=StaffMain.jsp\">BACK</a> <br/><br/>");
+        }
+        %>
+        
         <table border="1">
             <tr>
                 <th>Name</th>

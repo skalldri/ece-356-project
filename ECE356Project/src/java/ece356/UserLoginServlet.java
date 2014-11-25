@@ -74,7 +74,7 @@ public class UserLoginServlet extends HttpServlet {
                     
                     if(result.getNString("type").equals("DOCTOR"))
                     {
-                        url = "/DoctorMain";
+                        url = "/doctor_home.jsp";
                     } else if(result.getNString("type").equals("STAFF")) {
                         url = "/StaffMain.jsp";
                     }

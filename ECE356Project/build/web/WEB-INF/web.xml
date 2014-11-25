@@ -48,6 +48,10 @@
         <servlet-name>CreatePatient</servlet-name>
         <servlet-class>ece356.CreatePatient</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PrescriptionSearch</servlet-name>
+        <servlet-class>ece356.PrescriptionSearch</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserLoginServlet</servlet-name>
         <url-pattern>/UserLoginServlet</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>CreatePatient</servlet-name>
         <url-pattern>/CreatePatient</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PrescriptionSearch</servlet-name>
+        <url-pattern>/PrescriptionSearch</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

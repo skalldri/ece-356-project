@@ -13,9 +13,13 @@
     </head>
     <body>
         <h1>Prescription Search</h1>
+        
+         <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
+        
          <form method="post" action="PrescriptionSearch">
              Health card: <input type="text" name="ohip"> <br/>
              Drug: <input type="text" name="drug"> <br/>
+             <input type="text" name="go_back" value="<%= request.getParameter("go_back")%>" hidden="true">
              <input type="submit">
          </form> 
     </body>
