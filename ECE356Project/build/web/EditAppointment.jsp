@@ -25,10 +25,11 @@
             Diagnosis: <input type="text" name="diagnosis" value="<%= request.getParameter("diagnosis") != null ? request.getParameter("diagnosis") : "" %>"> <br/>
             Description: <input type="text" name="procedure_description" value="<%= request.getParameter("description") != null ? request.getParameter("description") : "" %>"> <br/>
             Cost: <input type="text" name="procedure_cost" value="<%= request.getParameter("cost") != null ? request.getParameter("cost") : "" %>"> <br/>
+            Scheduling of Treatment: <input type="text" name="scheduling_of_treatment" value="<%= request.getParameter("scheduling_of_treatment") != null ? request.getParameter("scheduling_of_treatment") : "" %>"> <br/>
             
-            <input type="text" name="health_card" value="<%= request.getParameter("health_card") != null ? request.getParameter("health_card") : "" %>">
-            <input type="date" name="createdate" value="<%= request.getParameter("create") != null ? request.getParameter("create").substring(0, 10) : "" %>">
-            <input type="time" name="createtime" value="<%= request.getParameter("create") != null ? request.getParameter("create").substring(11) : "" %>">
+            <input type="text" name="health_card" hidden="true" value="<%= request.getParameter("health_card") != null ? request.getParameter("health_card") : "" %>">
+            <input type="date" name="createdate" hidden="true" value="<%= request.getParameter("create") != null ? request.getParameter("create").substring(0, 10) : "" %>">
+            <input type="time" name="createtime" hidden="true" value="<%= request.getParameter("create") != null ? request.getParameter("create").substring(11) : "" %>">
             <input type="text" name="go_back" value="<%= request.getParameter("go_back")%>" hidden="true">
             <input type="submit">
          </form>

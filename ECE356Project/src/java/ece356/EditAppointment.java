@@ -67,26 +67,49 @@ public class EditAppointment extends HttpServlet {
             Timestamp end_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("enddate") + " " + request.getParameter("endtime")).getTime());
             Timestamp created_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("createdate") + " " + request.getParameter("createtime")).getTime());
             
-            Visit visit = VisitationRecords.retrieveVisit(
-                    request.getParameter("doctor_username"), 
-                    start_datetime,
-                    end_datetime, 
-                    request.getParameter("health_card"),
-                    request.getParameter("diagnosis") != null ? request.getParameter("diagnosis") : "", 
-                    request.getParameter("procedure_description") != null ? request.getParameter("procedure_description") : "", 
-                    Double.valueOf(request.getParameter("procedure_cost")), 
-                    request.getParameter("scheduling_of_treatment") != null ? request.getParameter("scheduling_of_treatment") : "", 
-                    created_datetime);
+            String doctor_username = request.getParameter("doctor_username");
+            String health_card = request.getParameter("health_card");
+            String diagnosis = request.getParameter("diagnosis") != null ? request.getParameter("diagnosis") : "";
+            String procedure_description = request.getParameter("procedure_description") != null ? request.getParameter("procedure_description") : "";
+            Double procedure_cost = Double.valueOf(request.getParameter("procedure_cost"));
+            String scheduling_of_treatment = request.getParameter("scheduling_of_treatment") != null ? request.getParameter("scheduling_of_treatment") : "";
             
-            java.util.Date now = new java.util.Date();
-            String formattedDate = PatientMain.formatSqlDate(now);
-            //ToDo: Query
+            Visit visit = VisitationRecords.retrieveVisit(doctor_username, start_datetime);
+                        
             String modifyQuery = new StringBuilder().
+                        append("UPDATE Visit SET deleted_datetime='").
+                        append(PatientMain.formatSqlDate(new java.util.Date())).
+                        append("' WHERE doctor_username = '").
+                        append(visit.getDoctor_username()).
+                        append("' AND start_datetime = '").
+                        append(visit.getStart_datetime().toString()).
+                        append("' AND deleted_datetime ='0000-00-00 00:00:00'").
                         toString();
                 
-            int result = stmt.executeUpdate(modifyQuery);
+            stmt.executeUpdate(modifyQuery);
             
             String insertQuery = new StringBuilder().
+                        append("INSERT INTO Visit (doctor_username, start_datetime, end_datetime, health_card, diagnosis, procedure_description, procedure_cost, scheduling_of_treatment, created_datetime, deleted_datetime) VALUES ('").
+                        append(doctor_username).
+                        append("', '").
+                        append(start_datetime.toString().substring(0, 19)).
+                        append("', '").
+                        append(end_datetime.toString().substring(0, 19)).
+                        append("', '").
+                        append(health_card).
+                        append("', '").
+                        append(diagnosis).
+                        append("', '").
+                        append(procedure_description).
+                        append("', '").
+                        append(procedure_cost).
+                        append("', '").
+                        append(scheduling_of_treatment).
+                        append("', '").
+                        append(PatientMain.formatSqlDate(new java.util.Date())).
+                        append("', '").    
+                        append("0000-00-00 00:00:00").
+                        append("')").
                         toString();
             
             stmt.executeUpdate(insertQuery);

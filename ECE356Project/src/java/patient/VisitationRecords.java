@@ -66,7 +66,7 @@ public class VisitationRecords extends HttpServlet {
         request.getRequestDispatcher("VisitationRecords.jsp").forward(request, response);
     }
 
-    public static Visit retrieveVisit(String doctor_username, Timestamp start_datetime, Timestamp end_datetime, String health_card, String diagnosis, String procedure_description, Double procedure_cost, String scheduling_of_treatment, Timestamp created_datetime) {
+    public static Visit retrieveVisit(String doctor_username, Timestamp start_datetime) {
         Visit visit = null;
         
         Statement stmt;
@@ -82,20 +82,6 @@ public class VisitationRecords extends HttpServlet {
                     append(doctor_username).
                     append("' AND start_datetime = '").
                     append(start_datetime.toString()).
-                    append("' AND end_datetime = '").
-                    append(end_datetime.toString()).
-                    append("' AND health_card = '").
-                    append(health_card).
-                    append("' AND diagnosis = '").
-                    append(diagnosis).
-                    append("' AND procedure_description = '").
-                    append(procedure_description).
-                    append("' AND procedure_cost = '").
-                    append(procedure_cost).
-                    append("' AND scheduling_of_treatment = '").
-                    append(scheduling_of_treatment).
-                    append("' AND created_datetime = '").
-                    append(created_datetime.toString()).
                     append("' AND deleted_datetime = '0000-00-00 00:00:00' LIMIT 1").
                     toString();
             
