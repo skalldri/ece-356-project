@@ -109,11 +109,13 @@
                             v.getStart_datetime().getSeconds()
                         %>
                     </td>
-                    <td><form method="post" action="VisitationRecords"><% 
+                    <td><% 
                     if(!userData.getUserType().equals("patient")){
-                        out.println("<input name=\"editAppointment\" value=\"Edit\" type=\"submit\">");
+                        out.println("<td><a href=\"EditAppointment.jsp?go_back=VisitationRecords&start=" + v.getStart_datetime() + "&end=" + v.getEnd_datetime() + "&doctor=" + v.getDoctor_username() + "&diagnosis=" + v.getDiagnosis() + "&description=" + v.getProcedure_description() + "&cost=" + v.getProcedure_cost() + "\">Edit</a></td>");
+                        //out.println("<input name=\"editAppointment\" value=\"Edit\" type=\"submit\">");
                     }
-                    %></form></td>
+                    %>
+                    </td>
                 </tr>
                 <% } %>
             
