@@ -9,11 +9,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import patient.PatientMain;
 
 /**
  *
@@ -44,13 +47,37 @@ public class AddPermission extends HttpServlet {
         Connection con;
         try
         {
+            
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
             stmt = con.createStatement();
             
-            String insertQuery = new StringBuilder().
+            if(request.getParameter("action") == null) //First page load
+            {
+                // Do nothing
+            } 
+            else if(request.getParameter("action").equals("delete"))
+            {
+                java.util.Date now = new java.util.Date();
+                String formattedDate = PatientMain.formatSqlDate(now);
+
+                String modifyQuery = new StringBuilder().
+                            append("UPDATE Staff_Permissions SET deleted_datetime = '").
+                            append(PatientMain.formatSqlDate(now)).
+                            append("' WHERE username = '").
+                            append(request.getParameter("staff")).
+                            append("' AND health_card = '").
+                            append(request.getParameter("ohip")).
+                            append("' AND deleted_datetime ='0000-00-00 00:00:00'").
+                            toString();
+
+                int result = stmt.executeUpdate(modifyQuery);
+            } 
+            else if(request.getParameter("action").equals("add"))
+            {
+                String insertQuery = new StringBuilder().
                         append("INSERT INTO Staff_Permissions (username, health_card, permission_level) VALUES ('").
-                        append(request.getParameter("username")).
+                        append(request.getParameter("staff")).
                         append("', '").
                         append(request.getParameter("ohip")).
                         append("', '").
@@ -58,7 +85,24 @@ public class AddPermission extends HttpServlet {
                         append("')").
                         toString();
             
-            stmt.executeUpdate(insertQuery);
+                stmt.executeUpdate(insertQuery);
+            }
+            
+            String query = new StringBuilder().
+                    append("SELECT * FROM Staff_Permissions WHERE health_card = '").
+                    append(request.getParameter("ohip")).
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00'").
+                    toString();
+            
+            ResultSet result = stmt.executeQuery(query);
+            ArrayList<String> permissions = new ArrayList<String>();
+            
+            while(result.next())
+            {
+                permissions.add(result.getNString("username"));
+            }
+            
+            request.getSession().setAttribute("permissions", permissions);
             
             con.close();    
         }
@@ -81,27 +125,10 @@ public class AddPermission extends HttpServlet {
             }
             return;
         }
-            
-        if(request.getParameter("go_back") != null)
-        {
-            AdaptableHttpRequest addedRequest = new AdaptableHttpRequest(request);
-            addedRequest.addParameter("reload", "true");
-            
-            request.getRequestDispatcher(request.getParameter("go_back")).forward(addedRequest, response);
-            return;
-        }
         
-        if(((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("STAFF"))
-        {
-            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
-        }
-        else if (((UserData)request.getSession().getAttribute("userData")).getUserVariant().equals("DOCTOR"))
-        {
-            request.getRequestDispatcher("StaffMain.jsp").forward(request, response);
-        } else
-        {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        }
+        AdaptableHttpRequest r = new AdaptableHttpRequest(request);
+        
+        request.getRequestDispatcher("AddPermission.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

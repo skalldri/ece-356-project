@@ -136,8 +136,8 @@ public class PatientSearch extends HttpServlet {
             
             if(!myData.lastVisitEnd.isEmpty() || !myData.lastVisitStart.isEmpty())
             {
-                //TODO: Fix query to use specific query for Visit table in default_doctor's place
-                date = " AND EXISTS (SELECT start_datetime FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00'" + default_doctor + start_date + end_date + ")";
+                String username_restrict = " AND (doctor_username = '" + username + "' OR health_card IN (SELECT health_card from Staff_Permissions WHERE username = '" + username + "' AND deleted_datetime = '0000-00-00 00:00:00') OR doctor_username in (SELECT supervisor_username from Supervisor WHERE staff_username = '" + username + "' AND deleted_datetime = '0000-00-00 00:00:00'))";
+                date = " AND EXISTS (SELECT * FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00' AND health_card = Patient.health_card " + username_restrict + start_date + end_date + ")";
             }
             
             String query = new StringBuilder().
@@ -152,6 +152,7 @@ public class PatientSearch extends HttpServlet {
                     append("%' AND sin LIKE '%").
                     append(myData.sin).
                     append("%'").
+                    append(date).
                     append(deleted_records).
                     append(default_doctor).
                     toString();
@@ -174,6 +175,7 @@ public class PatientSearch extends HttpServlet {
                     append("%' AND sin LIKE '%").
                     append(request.getParameter("sin")).
                     append("%'").
+                    append(date).
                     append(deleted_records).
                     toString();
             }

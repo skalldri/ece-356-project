@@ -64,7 +64,7 @@
                        out.println("<td><a href=\"PrescriptionRecords?go_back=PatientSearch&ohip=" + list.get(i).getHealth_card() + "\">View</a></td>");
                        if(userData.getUserVariant().equals("DOCTOR"))
                        {
-                           out.println("<td><a href=\"AddPermission.jsp?go_back=PatientSearch&patient=" + list.get(i).getHealth_card() + "\">Add</a></td>");
+                           out.println("<td><a href=\"AddPermission?go_back=PatientSearch&ohip=" + list.get(i).getHealth_card() + "\">Add</a></td>");
                            out.println("<td><a href=\"AssignPatient.jsp?go_back=PatientSearch&patient=" + list.get(i).getHealth_card() + "\">Assign</a></td>");
                        } else {
                            out.println("<td>Not Available</td>");
