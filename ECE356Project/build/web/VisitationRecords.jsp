@@ -74,7 +74,7 @@
         </select>
         
         
-        <table id="mainTable">
+        <table border="1" id="mainTable">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -85,6 +85,9 @@
                     <th>Description</th>
                     <th>Cost</th>
                     <th>Created Time</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    <th>Create Prescription</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,6 +116,10 @@
                     if(!userData.getUserType().equals("patient")){
                         out.println("<td><a href=\"EditAppointment.jsp?go_back=VisitationRecords&health_card=" + request.getParameter("patient")  + "&start=" + v.getStart_datetime() + "&end=" + v.getEnd_datetime() + "&doctor=" + v.getDoctor_username() + "&diagnosis=" + v.getDiagnosis() + "&description=" + v.getProcedure_description() + "&cost=" + v.getProcedure_cost() + "&scheduling_of_treatment=" + v.getScheduling_of_treatment() + "&create=" + v.getCreated_datetime() + "\">Edit</a></td>");
                         out.println("<td><a href=\"VisitationRecords?go_back=PatientSearch&action=delete&patient=" + v.getHealth_card() + "&start=" + v.getStart_datetime() + "&doctor=" + v.getDoctor_username() + "\">Delete</a></td>");
+                        out.println("<td><a href=\"NewPrescription.jsp?go_back=VisitationRecords&ohip=" + request.getParameter("patient") + "\">Create</a></td>");
+                    } else {
+                        out.println("<td>Not Available</td>");
+                        out.println("<td>Not Available</td>");                                                 
                     }
                     %>
                 </tr>

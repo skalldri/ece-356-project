@@ -117,6 +117,7 @@ public class VisitationRecords extends HttpServlet {
         {
             AdaptableHttpRequest r = new AdaptableHttpRequest(request);
             r.addParameter("go_back", (String)request.getSession().getAttribute("visit_go_back"));
+            r.addParameter("patient", (String)request.getSession().getAttribute("ohip_visit"));
             request.getRequestDispatcher("VisitationRecords.jsp").forward(r, response);
             return;
         }

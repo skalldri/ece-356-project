@@ -83,13 +83,13 @@ public class EditAppointment extends HttpServlet {
                         append(visit.getDoctor_username()).
                         append("' AND start_datetime = '").
                         append(visit.getStart_datetime().toString()).
-                        append("' AND deleted_datetime ='0000-00-00 00:00:00'").
+                        append("' AND deleted_datetime = '0000-00-00 00:00:00'").
                         toString();
                 
             stmt.executeUpdate(modifyQuery);
             
             String insertQuery = new StringBuilder().
-                        append("INSERT INTO Visit (doctor_username, start_datetime, end_datetime, health_card, diagnosis, procedure_description, procedure_cost, scheduling_of_treatment, created_datetime, deleted_datetime) VALUES ('").
+                        append("INSERT INTO Visit (doctor_username, start_datetime, end_datetime, health_card, diagnosis, procedure_description, procedure_cost, scheduling_of_treatment) VALUES ('").
                         append(doctor_username).
                         append("', '").
                         append(start_datetime.toString().substring(0, 19)).
@@ -105,10 +105,6 @@ public class EditAppointment extends HttpServlet {
                         append(procedure_cost).
                         append("', '").
                         append(scheduling_of_treatment).
-                        append("', '").
-                        append(PatientMain.formatSqlDate(new java.util.Date())).
-                        append("', '").    
-                        append("0000-00-00 00:00:00").
                         append("')").
                         toString();
             
@@ -128,6 +124,7 @@ public class EditAppointment extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
+                e.printStackTrace(out);
                 out.println("</body>");
                 out.println("</html>");
             } finally {            

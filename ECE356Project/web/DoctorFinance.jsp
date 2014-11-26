@@ -36,21 +36,24 @@
     <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
     <jsp:useBean id="doctor" class="java.lang.String" scope="session"/> 
     <jsp:useBean id="docRevenue" type="Double" scope="session"/>
+    <jsp:useBean id="docPtRevenue" type="Double" scope="session"/>
+    <jsp:useBean id="patientsViewed" type="Integer" scope="session"/>
     
     
     <body>
         <h1>Doctor <%=doctor%>'s financial page</h1> <br>
-        Select range:<br>
+        Select period:<br>
         <%out.println("<form method=\"post\" action=\"FinanceLists?page=doc2&doctor="+doctor+"\">");%>
             From:
             <input type="date" name="start">
             To:
             <input type="date" name="end">
-            <input type="submit" value="Send">
+            <input type="submit" value="Update">
         </form> <br>
              
-        Revenue Earned: $<%out.println(docRevenue);%><br> <br>
-        Number of patients examined: <br>
+        Revenue earned from procedures and visits: <%out.println(docRevenue);%><br>
+        Revenue earned from prescriptions: <%out.println(docPtRevenue);%><br>
+        Number of patients examined: <%out.println(patientsViewed);%><br>
         Filter patient visits and procedures: 
         <input type="text" id="search" placeholder="Enter filter"> <br>
         <table border="1">
