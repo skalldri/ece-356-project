@@ -63,7 +63,9 @@ public class EditAppointment extends HttpServlet {
             }
             
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-            Timestamp original_start_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("startdate") + " " + request.getParameter("starttime")).getTime());
+            String orig_startdate = request.getParameter("orig_startdate") != "" ? request.getParameter("orig_startdate") : request.getParameter("startdate");
+            String orig_starttime = request.getParameter("orig_starttime") != "" ? request.getParameter("orig_starttime") : request.getParameter("starttime");
+            Timestamp original_start_datetime = new java.sql.Timestamp(dateFormat.parse(orig_startdate + " " + orig_starttime).getTime());
             Timestamp start_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("startdate") + " " + request.getParameter("starttime")).getTime());
             Timestamp end_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("enddate") + " " + request.getParameter("endtime")).getTime());
             
