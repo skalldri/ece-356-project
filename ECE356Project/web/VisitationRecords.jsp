@@ -64,7 +64,10 @@
         <h1>Visitation Records</h1>
         
         <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
+        
+        <% if (!userData.getUserType().equals("patient")) { %>
         <br/> <a href="EditAppointment.jsp?go_back=VisitationRecords&health_card=<%=request.getParameter("patient")%><%= userData.getUserVariant().equals("DOCTOR") ? ("&doctor=" + userData.getUsername()) : "" %>">Create New</a> <br/><br/>
+        <% } %>
         
         <br>
         Show records
@@ -88,7 +91,9 @@
                     <th>Scheduling of Treatment</th>
                     <th>Edit</th>
                     <th>Delete</th>
+                    <% if (!userData.getUserType().equals("patient")) { %>
                     <th>Create Prescription</th>
+                    <% } %>
                 </tr>
             </thead>
             <tbody>
