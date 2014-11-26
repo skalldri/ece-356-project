@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import models.Visit;
+import models.Prescription;
 
 /**
  *
@@ -53,58 +54,71 @@ public class FinanceLists extends HttpServlet {
         String ohip = request.getParameter("patient");
         
         if(page.equals("procedure")){
-            ArrayList<Visit> procedures = fetchVisits(page);
+            ArrayList<Visit> procedures = fetchVisits(page, start, end);
             session.setAttribute("procedures", procedures);
-            double procRevenue = fetchRevenue(page);            
+            double procRevenue = fetchRevenue(page, start, end);            
             session.setAttribute("procRevenue", procRevenue);     
             request.getRequestDispatcher("ProcedureRevenue.jsp").forward(request, response);
         }
         else if(page.equals("visit")){
-                ArrayList<Visit> visitVisits = fetchVisits(page);
+                ArrayList<Visit> visitVisits = fetchVisits(page, start, end);
                 session.setAttribute("visitVisits", visitVisits);
-                double visitRevenue = fetchRevenue(page);
+                double visitRevenue = fetchRevenue(page, start, end);
                 session.setAttribute("visitRevenue", visitRevenue);
                 request.getRequestDispatcher("VisitRevenue.jsp").forward(request, response);
         }
         else if (page.equals("insurance")){
-                ArrayList<Visit> insuranceVisits = fetchVisits(page);
+                ArrayList<Visit> insuranceVisits = fetchVisits(page, start, end);
                 session.setAttribute("insuranceVisits", insuranceVisits);
-                double insuranceRevenue = fetchRevenue(page);
+                double insuranceRevenue = fetchRevenue(page, start, end);
                 session.setAttribute("insuranceRevenue", insuranceRevenue);
+                double insurancePtRevenue = fetchPtInsuranceRevenue(start, end);
+                session.setAttribute("insurancePtRevenue", insurancePtRevenue);                
                 request.getRequestDispatcher("InsuranceBilling.jsp").forward(request, response);
         }
         else if (page.equals("doc2")){
             session.setAttribute("doctor", doctor);
             session.setAttribute("ohip", ohip);
-            ArrayList<Visit> docVisits = fetchDoctorVisits(doctor,start,end);
+            ArrayList<Visit> docVisits = fetchDoctorVisits(doctor, start, end);
             session.setAttribute("docVisits", docVisits);
-            double docRevenue = fetchDoctorRevenue(doctor, start, end);
-            session.setAttribute("docRevenue", docRevenue);                 
+            double docRevenue = fetchDoctorVPRevenue(doctor, start, end);
+            session.setAttribute("docRevenue", docRevenue);
+            double docPtRevenue = fetchPtDocRevenue(doctor, start, end);
+            session.setAttribute("docPtRevenue", docPtRevenue);
+            int patientsViewed = fetchPatientsViewed(doctor, start, end);
+            session.setAttribute("patientsViewed", patientsViewed);
             request.getRequestDispatcher("DoctorFinance.jsp").forward(request, response);
         }
         else if (page.equals("docfin")){
             session.setAttribute("doctor", doctor);
             session.setAttribute("ohip", ohip);
-            ArrayList<Visit> patientVisits = fetchPatientVisits(ohip, doctor, start, end);
+            ArrayList<Visit> patientVisits = fetchPatientVisits(ohip, doctor);
             session.setAttribute("patientVisits", patientVisits);
-            int numpVisits = fetchNumPVisits(ohip, doctor, start, end);
-            //check for procedures and visits?
+            int numpVisits = fetchNumPVisits(ohip, doctor);
             session.setAttribute("numpVisits", numpVisits);
-            double docRevenue = fetchDoctorRevenue(doctor, start, end);
-            session.setAttribute("docRevenue", docRevenue);                 
+            ArrayList<Prescription> prescriptions = fetchPrescriptions(ohip, doctor);
+            session.setAttribute("prescriptions", prescriptions);
+            //double docRevenue = fetchDoctorVPRevenue(doctor, start, end);
+            //session.setAttribute("docRevenue", docRevenue);
+            //double docPtRevenue = fetchPtDocRevenue(doctor, start, end);
+            //session.setAttribute("docPtRevenue", docPtRevenue);
+            //int patientsViewed = fetchPatientsViewed(doctor, start, end);
+           // session.setAttribute("patientsViewed", patientsViewed);
             request.getRequestDispatcher("DoctorPatient.jsp").forward(request, response);
         }
         else{
             //ArrayList<Visit> docVisits = fetchDoctorVisits(doctor,start,end);
             //session.setAttribute("docVisits", docVisits);
             session.setAttribute("docRevenue", 0.0);
+            session.setAttribute("docPtRevenue", 0.0);
+            session.setAttribute("patientsViewed", 0);
             session.setAttribute("doctor", doctor);
             session.setAttribute("docVisits", new ArrayList<Visit>());
             request.getRequestDispatcher("DoctorFinance.jsp").forward(request, response);
         }
     }
     
-    private int fetchNumPVisits(String ohip, String doctor, String start, String end) {
+    private int fetchNumPVisits(String ohip, String doctor) {
         int count = 0;              
         Statement stmt;
         Connection con;
@@ -136,7 +150,7 @@ public class FinanceLists extends HttpServlet {
     }
     
     
-    private ArrayList<Visit> fetchPatientVisits(String ohip, String doctor, String start, String end) {
+    private ArrayList<Visit> fetchPatientVisits(String ohip, String doctor) {
         ArrayList<Visit> visits = new ArrayList<Visit>();               
         Statement stmt;
         Connection con;
@@ -157,8 +171,7 @@ public class FinanceLists extends HttpServlet {
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next())
-            {             
-                Double cost = result.getDouble("procedure_cost");
+            {
                 visits.add(
                         new Visit(
                             result.getNString("doctor_username"), 
@@ -167,7 +180,7 @@ public class FinanceLists extends HttpServlet {
                             result.getNString("health_card"), 
                             result.getNString("diagnosis"), 
                             result.getNString("procedure_description"), 
-                            cost,
+                            result.getDouble("procedure_cost"),
                             result.getNString("scheduling_of_treatment"), 
                             result.getTimestamp("created_datetime"),
                             result.getTimestamp("created_datetime")
@@ -182,7 +195,48 @@ public class FinanceLists extends HttpServlet {
         return visits;
     }
     
-    private double fetchRevenue(String page) {
+    private ArrayList<Prescription> fetchPrescriptions(String ohip, String doctor) {
+        ArrayList<Prescription> prescriptions = new ArrayList<Prescription>();               
+        Statement stmt;
+        Connection con;
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+            stmt = con.createStatement();
+            
+           String query = new StringBuilder().
+                    append("SELECT * FROM Prescription WHERE doctor_username = '").
+                    append(doctor).
+                    append("' AND deleted_datetime = '0000-00-00 00:00:00' AND health_card = '").
+                    append(ohip).
+                    append("'").
+                    toString();
+            
+            ResultSet result = stmt.executeQuery(query);
+
+            while (result.next())
+            {             
+                prescriptions.add(
+                        new Prescription(
+                            result.getNString("doctor_username"),  
+                            result.getNString("health_card"), 
+                            result.getNString("drug_name"),
+                            new Integer(result.getInt("refills")),
+                            result.getDate("start_datetime"),
+                            result.getDate("end_datetime")
+                        ));
+            }     
+            con.close();          
+        }
+        catch(Exception e) 
+        {
+            return prescriptions;
+        }       
+        return prescriptions;
+    }
+    
+    private double fetchRevenue(String page, String start, String end) {
         Double cost = 0.0;              
         Statement stmt;
         Connection con;
@@ -195,7 +249,13 @@ public class FinanceLists extends HttpServlet {
             
             if(page.equals("procedure")||page.equals("insurance")){
                 query = new StringBuilder().
-                    append("SELECT SUM(procedure_cost) FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00' AND procedure_description IS NOT NULL").
+                    append("SELECT SUM(procedure_cost) FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00' AND procedure_cost > '0.0'").
+                    append("AND start_datetime >= '").
+                    append(start).
+                    append(" 00:00:00").
+                    append("' AND start_datetime <= '").
+                    append(end).
+                    append(" 23:59:59' AND procedure_cost > '0.0'").
                     toString();
                 ResultSet result = stmt.executeQuery(query);
                 while (result.next())
@@ -206,14 +266,20 @@ public class FinanceLists extends HttpServlet {
             
             if (page.equals("visit")||page.equals("insurance")) {
                 query = new StringBuilder().
-                    append("SELECT COUNT(*) FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00' AND procedure_description IS NULL").
+                    append("SELECT COUNT(*) FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00'").
+                    append("AND start_datetime >= '").
+                    append(start).
+                    append(" 00:00:00").
+                    append("' AND start_datetime <= '").
+                    append(end).
+                    append(" 23:59:59'").
                     toString();
                 ResultSet result = stmt.executeQuery(query);
                 while (result.next())
                 {             
                     cost += 100*result.getDouble(1);
                 } 
-            }             
+            }
                
             con.close();          
         }
@@ -224,8 +290,108 @@ public class FinanceLists extends HttpServlet {
         return cost;
     }
     
+    private double fetchPtInsuranceRevenue(String start, String end) {
+        Double cost = 0.0;              
+        Statement stmt;
+        Connection con;
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+            stmt = con.createStatement();
+            String query = new StringBuilder().
+                    append("SELECT SUM(cost) FROM Prescription a, Drug b WHERE a.drug_name = b.drug_name AND a.deleted_datetime = '0000-00-00 00:00:00'").
+                    append("AND a.start_datetime >= '").
+                    append(start).
+                    append(" 00:00:00").
+                    append("' AND a.start_datetime <= '").
+                    append(end).
+                    append(" 23:59:59'").
+                    toString();
+                ResultSet result = stmt.executeQuery(query);
+                while (result.next())
+                {             
+                    cost += result.getDouble(1);
+                } 
+               
+            con.close();          
+        }
+        catch(Exception e) 
+        {
+            return cost;
+        }       
+        return cost;
+    }
     
-    private ArrayList<Visit> fetchVisits(String page) {
+    private double fetchPtDocRevenue(String doctor, String start, String end) {
+        Double cost = 0.0;              
+        Statement stmt;
+        Connection con;
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+            stmt = con.createStatement();
+            String query = new StringBuilder().
+                    append("SELECT SUM(cost) FROM Prescription a, Drug b WHERE a.drug_name = b.drug_name AND a.deleted_datetime = '0000-00-00 00:00:00' AND a.doctor_username = '").
+                    append(doctor).
+                    append("' AND a.start_datetime >= '").
+                    append(start).
+                    append(" 00:00:00").
+                    append("' AND a.start_datetime <= '").
+                    append(end).
+                    append(" 23:59:59'").
+                    toString();
+                ResultSet result = stmt.executeQuery(query);
+                while (result.next())
+                {             
+                    cost += result.getDouble(1);
+                } 
+               
+            con.close();          
+        }
+        catch(Exception e) 
+        {
+            return cost;
+        }       
+        return cost;
+    }
+    
+    private int fetchPatientsViewed(String doctor, String start, String end) {
+        int count = 0;              
+        Statement stmt;
+        Connection con;
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+            stmt = con.createStatement();
+            String query = new StringBuilder().
+                    append("SELECT COUNT(DISTINCT health_card) FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00' AND doctor_username = '").
+                    append(doctor).
+                    append("' AND start_datetime >= '").
+                    append(start).
+                    append(" 00:00:00' AND start_datetime <= '").
+                    append(end).
+                    append(" 23:59:59'").
+                    toString();
+                ResultSet result = stmt.executeQuery(query);
+                while (result.next())
+                {             
+                    count += result.getInt(1);
+                } 
+               
+            con.close();          
+        }
+        catch(Exception e) 
+        {
+            return count;
+        }       
+        return count;
+    }
+    
+    
+    private ArrayList<Visit> fetchVisits(String page, String start, String end) {
         ArrayList<Visit> visits = new ArrayList<Visit>();               
         Statement stmt;
         Connection con;
@@ -238,27 +404,32 @@ public class FinanceLists extends HttpServlet {
                     
             if(page.equals("procedure")){
                 query = new StringBuilder().
-                    append("SELECT * FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00' AND procedure_description IS NOT NULL").
+                    append("SELECT * FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00'").
+                    append("AND start_datetime >= '").
+                    append(start).
+                    append(" 00:00:00").
+                    append("' AND start_datetime <= '").
+                    append(end).
+                    append(" 23:59:59' AND procedure_cost > '0.0'").
                     toString();
             }
             
-            else if (page.equals("visit")) {
-                query = new StringBuilder().
-                    append("SELECT * FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00' AND procedure_description IS NULL").
-                    toString();
-            }
-            
-            else if (page.equals("insurance")) {
+            else  {
                 query = new StringBuilder().
                     append("SELECT * FROM Visit WHERE deleted_datetime = '0000-00-00 00:00:00'").
+                    append("AND start_datetime >= '").
+                    append(start).
+                    append(" 00:00:00").
+                    append("' AND start_datetime <= '").
+                    append(end).
+                    append(" 23:59:59'").
                     toString();
             }
              
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next())
-            {             
-                Double cost = result.getDouble("procedure_cost");
+            {
                 visits.add(
                         new Visit(
                             result.getNString("doctor_username"), 
@@ -267,7 +438,7 @@ public class FinanceLists extends HttpServlet {
                             result.getNString("health_card"), 
                             result.getNString("diagnosis"), 
                             result.getNString("procedure_description"), 
-                            cost,
+                            result.getDouble("procedure_cost"),
                             result.getNString("scheduling_of_treatment"), 
                             result.getTimestamp("created_datetime"),
                             result.getTimestamp("created_datetime")
@@ -282,7 +453,7 @@ public class FinanceLists extends HttpServlet {
         return visits;
     }
     
-    private double fetchDoctorRevenue(String doctor, String start, String end) {
+    private double fetchDoctorVPRevenue(String doctor, String start, String end) {
         Double cost = 0.0;              
         Statement stmt;
         Connection con;
@@ -300,15 +471,15 @@ public class FinanceLists extends HttpServlet {
                     append(" 00:00:00").
                     append("' AND start_datetime <= '").
                     append(end).
-                    append(" 23:59:59' AND procedure_description IS NOT NULL").
+                    append(" 23:59:59' AND procedure_cost > '0.0'").
                     toString();
              
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next())
             {             
-                cost = result.getDouble(1);
-            }
+                cost += result.getDouble(1);
+            }            
             
             query = new StringBuilder().
                     append("SELECT COUNT(*) FROM Visit WHERE doctor_username = '").
@@ -318,7 +489,7 @@ public class FinanceLists extends HttpServlet {
                     append(" 00:00:00").
                     append("' AND start_datetime <= '").
                     append(end).
-                    append(" 23:59:59' AND procedure_description IS NULL").
+                    append(" 23:59:59'").
                     toString();
             
             result = stmt.executeQuery(query);
@@ -326,7 +497,8 @@ public class FinanceLists extends HttpServlet {
             while (result.next())
             {             
                 cost += 100*result.getDouble(1);
-            }    
+            }
+            
             con.close();          
         }
         catch(Exception e) 
@@ -362,8 +534,7 @@ public class FinanceLists extends HttpServlet {
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next())
-            {             
-                Double cost = result.getDouble("procedure_cost");
+            {
                 visits.add(
                         new Visit(
                             result.getNString("doctor_username"), 
@@ -372,7 +543,7 @@ public class FinanceLists extends HttpServlet {
                             result.getNString("health_card"), 
                             result.getNString("diagnosis"), 
                             result.getNString("procedure_description"), 
-                            cost,
+                            result.getDouble("procedure_cost"),
                             result.getNString("scheduling_of_treatment"), 
                             result.getTimestamp("created_datetime"),
                             result.getTimestamp("created_datetime")

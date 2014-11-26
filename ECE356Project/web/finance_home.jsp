@@ -19,8 +19,8 @@
         Welcome <%= userData.getUsername() %> <br><br>
         
         <a href="DoctorList">View doctor records</a> <br>
-        <a href="FinanceLists?page=procedure">View procedure revenues</a> <br>
-        <a href="FinanceLists?page=visit">View visitation revenues</a> <br>  
-        <a href="FinanceLists?page=insurance">Review provincial health insurance billing</a> <br>
+        <a href="FinanceLists?page=procedure&start=0&end=0">View procedure revenues</a> <br>
+        <a href="FinanceLists?page=visit&start=0&end=0">View visitation revenues</a> <br>  
+        <a href="FinanceLists?page=insurance&start=0&end=0">Review provincial health insurance billing</a> <br>
     </body>
 </html>

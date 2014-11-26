@@ -38,8 +38,16 @@
     
     <body>
         <h1>Visitation Revenue</h1> <br>
-        Total revenue from visits: $<%out.println(visitRevenue);%> <br>
-        Filter visit list: 
+        Select period: <br>
+        <%out.println("<form method=\"post\" action=\"FinanceLists?page=visit\">");%>
+            From:
+            <input type="date" name="start">
+            To:
+            <input type="date" name="end">
+            <input type="submit" value="Update">
+        </form> <br>
+        Total revenue from visits in this period: <%out.println(visitRevenue);%> <br>
+        Filter visits: 
         <input type="text" id="search" placeholder="Enter filter"> <br>
         <table border="1">
             <thead>

@@ -35,10 +35,20 @@
     <jsp:useBean id="insuranceVisits" class="java.util.ArrayList" scope="session"/>  
     <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
     <jsp:useBean id="insuranceRevenue" type="Double" scope="session"/>
+    <jsp:useBean id="insurancePtRevenue" type="Double" scope="session"/>
     
     <body>
-        <h1>Monthly visitation and procedure revenue</h1> <br>
-        Total revenue from visits and procedures for billing: $<%out.println(insuranceRevenue);%> <br>
+        <h1>Provincial Health Insurance Billing</h1> <br>
+        Select period: <br>
+        <%out.println("<form method=\"post\" action=\"FinanceLists?page=insurance\">");%>
+            From:
+            <input type="date" name="start">
+            To:
+            <input type="date" name="end">
+            <input type="submit" value="Update">
+        </form> <br>
+        Total revenue from doctor visits and procedures for selected billing period: <%out.println(insuranceRevenue);%> <br>
+        Total revenue from prescriptions for selected billing period: <%out.println(insurancePtRevenue);%> <br>
         Filter visit and procedure list: 
         <input type="text" id="search" placeholder="Enter filter"> <br>
         <table border="1">

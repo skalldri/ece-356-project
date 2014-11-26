@@ -38,8 +38,16 @@
     
     <body>
         <h1>Procedure Revenue</h1> <br>
-        Total revenue from procedures: $<%out.println(procRevenue);%> <br>
-        Filter procedure list: 
+        Select period:<br>
+        <%out.println("<form method=\"post\" action=\"FinanceLists?page=procedure\">");%>
+            From:
+            <input type="date" name="start">
+            To:
+            <input type="date" name="end">
+            <input type="submit" value="Update">
+        </form> <br>
+        Total revenue from procedures in this period: <%out.println(procRevenue);%> <br>
+        Filter procedures: 
         <input type="text" id="search" placeholder="Enter filter"> <br>
         <table border="1">
             <thead>
