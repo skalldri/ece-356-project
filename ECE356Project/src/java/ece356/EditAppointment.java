@@ -65,28 +65,30 @@ public class EditAppointment extends HttpServlet {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             Timestamp start_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("startdate") + " " + request.getParameter("starttime")).getTime());
             Timestamp end_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("enddate") + " " + request.getParameter("endtime")).getTime());
-            Timestamp created_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("createdate") + " " + request.getParameter("createtime")).getTime());
             
             String doctor_username = request.getParameter("doctor_username");
             String health_card = request.getParameter("health_card");
             String diagnosis = request.getParameter("diagnosis") != null ? request.getParameter("diagnosis") : "";
             String procedure_description = request.getParameter("procedure_description") != null ? request.getParameter("procedure_description") : "";
-            Double procedure_cost = Double.valueOf(request.getParameter("procedure_cost"));
+            Double procedure_cost = request.getParameter("procedure_cost") != null && !request.getParameter("procedure_cost").isEmpty() ? Double.valueOf(request.getParameter("procedure_cost")) : 0.0d;
             String scheduling_of_treatment = request.getParameter("scheduling_of_treatment") != null ? request.getParameter("scheduling_of_treatment") : "";
             
             Visit visit = VisitationRecords.retrieveVisit(doctor_username, start_datetime);
-                        
-            String modifyQuery = new StringBuilder().
-                        append("UPDATE Visit SET deleted_datetime='").
-                        append(PatientMain.formatSqlDate(new java.util.Date())).
-                        append("' WHERE doctor_username = '").
-                        append(visit.getDoctor_username()).
-                        append("' AND start_datetime = '").
-                        append(visit.getStart_datetime().toString()).
-                        append("' AND deleted_datetime = '0000-00-00 00:00:00'").
-                        toString();
-                
-            stmt.executeUpdate(modifyQuery);
+            
+            if(visit != null)
+            {    
+                String modifyQuery = new StringBuilder().
+                            append("UPDATE Visit SET deleted_datetime='").
+                            append(PatientMain.formatSqlDate(new java.util.Date())).
+                            append("' WHERE doctor_username = '").
+                            append(visit.getDoctor_username()).
+                            append("' AND start_datetime = '").
+                            append(visit.getStart_datetime().toString()).
+                            append("' AND deleted_datetime = '0000-00-00 00:00:00'").
+                            toString();
+
+                stmt.executeUpdate(modifyQuery);
+            }
             
             String insertQuery = new StringBuilder().
                         append("INSERT INTO Visit (doctor_username, start_datetime, end_datetime, health_card, diagnosis, procedure_description, procedure_cost, scheduling_of_treatment) VALUES ('").

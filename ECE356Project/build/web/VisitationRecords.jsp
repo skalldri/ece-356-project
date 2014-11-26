@@ -64,6 +64,7 @@
         <h1>Visitation Records</h1>
         
         <br/> <a href="<%= request.getParameter("go_back")%>?reload">BACK</a> <br/><br/>
+        <br/> <a href="EditAppointment.jsp?go_back=VisitationRecords&health_card=<%=request.getParameter("patient")%><%= userData.getUserVariant().equals("DOCTOR") ? ("&doctor=" + userData.getUsername()) : "" %>">Create New</a> <br/><br/>
         
         <br>
         Show records
@@ -84,7 +85,7 @@
                     <th>Diagnosis</th>
                     <th>Description</th>
                     <th>Cost</th>
-                    <th>Created Time</th>
+                    <th>Scheduling of Treatment</th>
                     <th>Edit</th>
                     <th>Delete</th>
                     <th>Create Prescription</th>
@@ -102,7 +103,7 @@
                     <td><%= v.getDiagnosis() %></td>
                     <td><%= v.getProcedure_description() %></td>
                     <td><%= v.getProcedure_cost() %></td>
-                    <td><%= DateFormat.getDateTimeInstance().format(v.getCreated_datetime()) %></td>
+                    <td><%= v.getScheduling_of_treatment() %></td>
                     <td id="start" style="display: none">
                         <%= (v.getStart_datetime().getYear() + 1900) + "-" +
                             (v.getStart_datetime().getMonth() + 1) + "-" +
@@ -114,7 +115,7 @@
                     </td>
                     <% 
                     if(!userData.getUserType().equals("patient")){
-                        out.println("<td><a href=\"EditAppointment.jsp?go_back=VisitationRecords&health_card=" + request.getParameter("patient")  + "&start=" + v.getStart_datetime() + "&end=" + v.getEnd_datetime() + "&doctor=" + v.getDoctor_username() + "&diagnosis=" + v.getDiagnosis() + "&description=" + v.getProcedure_description() + "&cost=" + v.getProcedure_cost() + "&scheduling_of_treatment=" + v.getScheduling_of_treatment() + "&create=" + v.getCreated_datetime() + "\">Edit</a></td>");
+                        out.println("<td><a href=\"EditAppointment.jsp?go_back=VisitationRecords&health_card=" + request.getParameter("patient") + "&start=" + v.getStart_datetime() + "&end=" + v.getEnd_datetime() + "&doctor=" + v.getDoctor_username() + "&diagnosis=" + v.getDiagnosis() + "&description=" + v.getProcedure_description() + "&cost=" + v.getProcedure_cost() + "&scheduling_of_treatment=" + v.getScheduling_of_treatment() + "&create=" + v.getCreated_datetime() + "\">Edit</a></td>");
                         out.println("<td><a href=\"VisitationRecords?go_back=PatientSearch&action=delete&patient=" + v.getHealth_card() + "&start=" + v.getStart_datetime() + "&doctor=" + v.getDoctor_username() + "\">Delete</a></td>");
                         out.println("<td><a href=\"NewPrescription.jsp?go_back=VisitationRecords&ohip=" + request.getParameter("patient") + "\">Create</a></td>");
                     } else {
