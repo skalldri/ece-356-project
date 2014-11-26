@@ -165,15 +165,15 @@ public class PatientSearch extends HttpServlet {
                     append("' AND deleted_datetime = '0000-00-00 00:00:00') OR health_card in (SELECT health_card from Staff_Permissions WHERE username = '").
                     append(username).
                     append("' AND deleted_datetime = '0000-00-00 00:00:00')) AND name LIKE '%").
-                    append(request.getParameter("name")).
+                    append(myData.name).
                     append("%' AND phone_number LIKE '%").
-                    append(request.getParameter("phone")).
+                    append(myData.phone).
                     append("%' AND comments LIKE '%").
-                    append(request.getParameter("comments")).
+                    append(myData.comments).
                     append("%' AND patient_health LIKE '%").
-                    append(request.getParameter("diagnosis")).
+                    append(myData.diagnosis).
                     append("%' AND sin LIKE '%").
-                    append(request.getParameter("sin")).
+                    append(myData.sin).
                     append("%'").
                     append(date).
                     append(deleted_records).
