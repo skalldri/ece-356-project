@@ -63,6 +63,7 @@ public class EditAppointment extends HttpServlet {
             }
             
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            Timestamp original_start_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("orig_startdate") + " " + request.getParameter("orig_starttime")).getTime());
             Timestamp start_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("startdate") + " " + request.getParameter("starttime")).getTime());
             Timestamp end_datetime = new java.sql.Timestamp(dateFormat.parse(request.getParameter("enddate") + " " + request.getParameter("endtime")).getTime());
             
@@ -73,7 +74,7 @@ public class EditAppointment extends HttpServlet {
             Double procedure_cost = request.getParameter("procedure_cost") != null && !request.getParameter("procedure_cost").isEmpty() ? Double.valueOf(request.getParameter("procedure_cost")) : 0.0d;
             String scheduling_of_treatment = request.getParameter("scheduling_of_treatment") != null ? request.getParameter("scheduling_of_treatment") : "";
             
-            Visit visit = VisitationRecords.retrieveVisit(doctor_username, start_datetime);
+            Visit visit = VisitationRecords.retrieveVisit(doctor_username, original_start_datetime);
             
             if(visit != null)
             {    

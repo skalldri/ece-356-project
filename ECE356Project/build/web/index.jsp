@@ -15,15 +15,6 @@
     <body>
         <a href="login.jsp">Login</a> </br>
         <a href="DatabaseTest">Test Database Connection</a> </br>
-        <a href="login_test.jsp">Print Session Data</a> </br>
-        
-        <% UserData ud = new UserData();
-           ud.setUserType("patient");
-           ud.setUsername("1234567890AB"); %>
-        <% request.getSession().setAttribute("userData", ud); %>
-        <a href="PatientMain">Patient Test</a> <br>
-
-        <a href="DrugSearch.jsp">Drug Test</a> <br>
-        <a href="NewPrescription.jsp">Prescription Test</a>
+        <a href="login_test.jsp">Print Session Data</a> 
     </body>
 </html>

@@ -28,8 +28,8 @@
             Scheduling of Treatment: <input type="text" name="scheduling_of_treatment" value="<%= request.getParameter("scheduling_of_treatment") != null ? request.getParameter("scheduling_of_treatment") : "" %>"> <br/>
             
             <input type="text" name="health_card" hidden="true" value="<%= request.getParameter("health_card") != null ? request.getParameter("health_card") : "" %>">
-            <input type="date" name="createdate" hidden="true" value="<%= request.getParameter("create") != null ? request.getParameter("create").substring(0, 10) : "" %>">
-            <input type="time" name="createtime" hidden="true" value="<%= request.getParameter("create") != null ? request.getParameter("create").substring(11) : "" %>">
+            <input type="date" name="orig_startdate" hidden="true" value="<%= request.getParameter("start") != null ? request.getParameter("start").substring(0, 10) : "" %>">
+            <input type="time" name="orig_starttime" hidden="true" value="<%= request.getParameter("start") != null ? request.getParameter("start").substring(11) : "" %>">
             <input type="text" name="go_back" value="<%= request.getParameter("go_back")%>" hidden="true">
             <input type="submit">
          </form>
