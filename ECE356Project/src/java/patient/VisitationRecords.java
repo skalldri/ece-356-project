@@ -67,6 +67,48 @@ public class VisitationRecords extends HttpServlet {
             }
         }
         
+        if(request.getParameter("action") != null){
+            Statement stmt;
+            Connection con;
+            try
+            {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection(Constants.url, Constants.user, Constants.pwd);
+                stmt = con.createStatement();
+                String deleteQuery = new StringBuilder().
+                        append("UPDATE Visit SET deleted_datetime='").
+                        append(PatientMain.formatSqlDate(new java.util.Date())).
+                        append("' WHERE doctor_username = '").
+                        append(request.getParameter("doctor")).
+                        append("' AND start_datetime = '").
+                        append(request.getParameter("start")).
+                        append("' AND deleted_datetime ='0000-00-00 00:00:00'").
+                        toString();
+
+                stmt.executeUpdate(deleteQuery);
+                con.close();
+            }
+            catch(Exception e) 
+            {
+                response.setContentType("text/html;charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                try {
+                    /* TODO output your page here. You may use following sample code. */
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Visitation Records</title>");            
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<h1>Exception occurred: " + e.toString() + "</h1>");
+                    out.println("</body>");
+                    out.println("</html>");
+                } finally {            
+                    out.close();
+                }
+                return;
+            }
+        }
+        
         List<Visit> visits = fetchVisits(ohip);
         
         request.getSession().setAttribute("visits", visits);
